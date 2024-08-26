@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CouponResource\Pages;
 use App\Filament\Resources\CouponResource\RelationManagers;
+use App\Filament\Resources\CouponResource\RelationManagers\OrdersRelationManager;
 use App\Models\Coupon;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -104,7 +105,7 @@ class CouponResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            OrdersRelationManager::class
         ];
     }
 
