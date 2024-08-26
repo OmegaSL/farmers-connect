@@ -68,8 +68,6 @@ class ProductResource extends Resource
                         Forms\Components\TextInput::make('base_price')
                             ->numeric()
                             ->minValue(0)
-                            ->reactive()
-                            // ->helperText('Price in old currency. e.g. "100" should be "10,000"')
                             ->required(),
                     ])->columns(2),
                 Forms\Components\RichEditor::make('short_description')
@@ -82,7 +80,8 @@ class ProductResource extends Resource
                     ->label('Long Description')
                     ->columnSpanFull(),
 
-                Forms\Components\Section::make()
+                Forms\Components\Section::make('Product Images')
+                    ->description('Featured image and additional images for this Item')
                     ->schema([
                         Forms\Components\FileUpload::make('image')
                             ->image()
@@ -101,6 +100,31 @@ class ProductResource extends Resource
                                     ->label('Product Image')
                                     ->columnSpanFull(),
                             ])
+                            ->collapsible()
+                            ->defaultItems(0)
+                            ->grid(3)
+                    ]),
+
+                Forms\Components\Section::make('Product Variants')
+                    ->description('List all the item variations')
+                    ->schema([
+                        Forms\Components\Repeater::make('variants')
+                            ->itemLabel(fn(array $state): ?string => $state['variant_name'] ?? null)
+                            ->relationship()
+                            ->schema([
+                                Forms\Components\TextInput::make('variant_name')
+                                    ->required()
+                                    ->columnSpanFull(),
+                                Forms\Components\TextInput::make('price')
+                                    ->numeric()
+                                    ->minValue(0)
+                                    ->required(),
+                                Forms\Components\TextInput::make('stock')
+                                    ->numeric()
+                                    ->minValue(0)
+                                    ->required(),
+                            ])
+                            ->columns(2)
                             ->collapsible()
                             ->defaultItems(0)
                             ->grid(3)
