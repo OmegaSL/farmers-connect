@@ -42,7 +42,7 @@ class Product extends Model
             $slug = Str::slug($product->name);
             $existingSlugs = Product::where('slug', 'like', "{$slug}%")->pluck('slug');
 
-            for ($i = 0; ; $i++) {
+            for ($i = 0;; $i++) {
                 $newSlug = $i ? "{$slug}-{$i}" : $slug;
                 if (!$existingSlugs->contains($newSlug)) {
                     break;
@@ -129,6 +129,16 @@ class Product extends Model
     public function promotions(): BelongsToMany
     {
         return $this->belongsToMany(Promotion::class, 'product_promotion', 'product_id', 'promotion_id');
+    }
+
+    /**
+     * Get all of the order_items for the Product
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function order_items(): HasMany
+    {
+        return $this->hasMany(OrderItem::class, 'product_id', 'id');
     }
 
     /**

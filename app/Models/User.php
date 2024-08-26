@@ -111,4 +111,14 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(Product::class, 'user_id', 'id');
     }
+
+    /**
+     * Get all of the orders for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'user_id', 'id');
+    }
 }
