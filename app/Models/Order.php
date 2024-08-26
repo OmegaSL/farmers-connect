@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+use function PHPUnit\Framework\isEmpty;
+
 class Order extends Model
 {
     use HasFactory;
@@ -15,9 +17,37 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
+        'tracking_number',
         'total_amount',
         'status'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($order) {
+            if (isEmpty($order->tracking_number)) {
+                $order->tracking_number = self::generateTrackingNumber();
+            }
+        });
+    }
+
+    /**
+     * Generate a unique tracking number for the order based on the format ORD-YYYYMMDD-UNIQUEID.
+     *
+     * @return string The generated tracking number
+     */
+    public static function generateTrackingNumber()
+    {
+        // Example format: ORD-YYYYMMDD-UNIQUEID
+        $date = date('Ymd');
+        $uniqueId = uniqid(); // You might replace this with an organization-specific unique ID generator
+
+        $trackingNumber = "ORD-{$date}-{$uniqueId}";
+
+        return $trackingNumber;
+    }
 
     /**
      * Get all of the order_items for the Order

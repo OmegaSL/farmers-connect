@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('product_variant_id')->nullable()->constrained('product_variants')->nullOnDelete();
             $table->integer('quantity');
             $table->decimal('price', 8, 2);
+            $table->enum('status', ['pending', 'completed', 'dropped', 'delivered', 'refunded']);
             $table->timestamps();
         });
     }

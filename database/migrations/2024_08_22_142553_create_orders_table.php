@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->string('tracking_number')->unique();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->decimal('total_amount', 8, 2);
-            $table->enum('status', ['pending', 'completed', 'cancelled']);
+            $table->enum('status', ['pending', 'completed', 'cancelled', 'partial_refund', 'complete_refund']);
             $table->timestamps();
         });
     }
