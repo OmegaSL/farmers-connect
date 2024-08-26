@@ -2,12 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use App\Models\Store;
+use Faker\Factory as Faker;
+use Illuminate\Support\Str;
 use App\Models\ProductCategory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Faker\Factory as Faker;
 
 class ProductSeeder extends Seeder
 {
@@ -19,6 +21,8 @@ class ProductSeeder extends Seeder
         $faker = Faker::create();
 
         $stores = Store::pluck('id')->toArray();
+
+        $users = User::pluck('id')->toArray();
 
         $products = [
             ['name' => 'Organic Tomatoes', 'category' => 'Tomatoes'],
@@ -81,8 +85,10 @@ class ProductSeeder extends Seeder
 
             DB::table('products')->insert([
                 'store_id' => $stores[array_rand($stores)],
+                'user_id' => $users[array_rand($users)],
                 'category_id' => $category->id,
                 'name' => $product['name'],
+                'slug' => Str::slug($product['name']),
                 'short_description' => $faker->sentence(),
                 'long_description' => $faker->paragraph(),
                 'base_price' => $faker->randomFloat(2, 0.50, 50.00),

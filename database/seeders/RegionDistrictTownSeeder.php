@@ -1040,7 +1040,7 @@ class RegionDistrictTownSeeder extends Seeder
             'name' => 'Super Admin',
             'first_name' => 'Super',
             'last_name' => 'Admin',
-            'email' => 'admin@admin.com',
+            'email' => 'admin@farm-connect.com',
         ]);
         User::factory(5)->create();
 
