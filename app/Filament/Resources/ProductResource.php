@@ -156,13 +156,8 @@ class ProductResource extends Resource
                     ->formatStateUsing(fn($state): string => 'GHS ' . number_format($state, 2))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label(trans('Creation Date'))
+                    ->dateTime('M j, Y')->sortable(),
             ])
             ->filters([
                 //
