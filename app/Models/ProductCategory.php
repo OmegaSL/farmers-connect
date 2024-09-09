@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -17,9 +18,20 @@ class ProductCategory extends Model
     protected $fillable = [
         'parent_id',
         'name',
+        'slug',
         'image',
-        'description'
+        'description',
+        'status'
     ];
+
+    // generate unique slug when ever a new category is created
+    public static function boot()
+    {
+        parent::boot();
+        self::creating(function ($model) {
+            $model->slug = Str::slug($model->name);
+        });
+    }
 
     /**
      * Get the category image.
@@ -59,5 +71,15 @@ class ProductCategory extends Model
     public function top_category(): BelongsTo
     {
         return $this->belongsTo(User::class, 'parent_id', 'id');
+    }
+
+    /**
+     * Get all of the products for the ProductCategory
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'category_id', 'id');
     }
 }

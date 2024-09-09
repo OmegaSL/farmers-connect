@@ -26,7 +26,9 @@ class Product extends Model
         'image',
         'short_description',
         'long_description',
-        'base_price'
+        'base_price',
+        'sale_price',
+        'status'
     ];
 
     // get the user_id of the product on creation
@@ -148,6 +150,16 @@ class Product extends Model
      */
     public function reviews(): HasMany
     {
-        return $this->hasMany(Review::class, 'product_id', 'id');
+        return $this->hasMany(Review::class, 'product_id', 'id')->where('is_approved', 1);
+    }
+
+    /**
+     * Get all of the wishlists for the Product
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function wishlists(): HasMany
+    {
+        return $this->hasMany(WishList::class, 'product_id', 'id');
     }
 }

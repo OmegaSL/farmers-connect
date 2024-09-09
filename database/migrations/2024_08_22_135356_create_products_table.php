@@ -22,7 +22,11 @@ return new class extends Migration
             $table->text('short_description')->nullable();
             $table->longText('long_description')->nullable();
             $table->decimal('base_price', 8, 2)->nullable();
+            $table->decimal('sale_price', 8, 2)->nullable();
+            $table->string('status')->default('published')->comment('published, unpublished');
             $table->timestamps();
+
+            $table->fullText(['name', 'short_description', 'long_description']);
         });
     }
 
