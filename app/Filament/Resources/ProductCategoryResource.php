@@ -9,6 +9,7 @@ use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use App\Models\ProductCategory;
 use Filament\Resources\Resource;
+use Illuminate\Validation\Rules\Unique;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ProductCategoryResource\Pages;
@@ -40,6 +41,10 @@ class ProductCategoryResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->reactive()
                     ->afterStateUpdated(fn($state, callable $set) => $set('slug', Str::slug($state)))
+                    // ->unique('product_categories', 'slug', fn(Builder $query) => $query->where('id', '!=', $form->model->id))
+                    ->unique(modifyRuleUsing: function (Unique $rule) use ($form) {
+                        return $rule->ignore($form->model->id);
+                    })
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('parent_id')
@@ -55,6 +60,11 @@ class ProductCategoryResource extends Resource
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('description')
                     ->columnSpanFull(),
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'active' => 'Active',
+                        'inactive' => 'Inactive',
+                    ])
             ]);
     }
 
@@ -75,6 +85,14 @@ class ProductCategoryResource extends Resource
                     ->circular()
                     ->sortable()
                     ->toggleable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->label(trans('Status'))
+                    ->badge()
+                    ->colors([
+                        'success' => 'active',
+                        'danger' => 'inactive',
+                    ])
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(trans('Creation Date'))
                     ->dateTime('M j, Y')->sortable(),

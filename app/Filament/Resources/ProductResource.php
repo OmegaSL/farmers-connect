@@ -69,6 +69,11 @@ class ProductResource extends Resource
                             ->numeric()
                             ->minValue(0)
                             ->required(),
+                        Forms\Components\Select::make('status')
+                            ->options([
+                                'unpublished' => 'Unpublished',
+                                'published' => 'Published',
+                            ])
                     ])->columns(2),
                 Forms\Components\RichEditor::make('short_description')
                     ->required()
@@ -86,7 +91,7 @@ class ProductResource extends Resource
                         Forms\Components\FileUpload::make('image')
                             ->image()
                             ->directory('products')
-                            ->required()
+                            // ->required()
                             ->label('Featured Image')
                             ->columnSpanFull(),
                         Forms\Components\Repeater::make('product_images')
@@ -154,6 +159,13 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('base_price')
                     ->numeric()
                     ->formatStateUsing(fn($state): string => 'GHS ' . number_format($state, 2))
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->colors([
+                        'success' => 'published',
+                        'danger' => 'unpublished',
+                    ])
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(trans('Creation Date'))
