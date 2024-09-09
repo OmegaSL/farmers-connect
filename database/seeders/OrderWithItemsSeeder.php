@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Transaction;
+use Faker\Factory as Faker;
 use App\Models\ProductVariant;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Log;
@@ -21,10 +23,14 @@ class OrderWithItemsSeeder extends Seeder
         User::all()->each(function ($user) {
             $this->createOrderForUser($user);
         });
+
+        $this->command->info('Orders table seeded!');
     }
 
     private function createOrderForUser($user)
     {
+        $faker = Faker::create();
+
         $order = Order::create([
             'user_id' => $user->id,
             'total_amount' => 0, // We'll calculate this later
@@ -39,6 +45,19 @@ class OrderWithItemsSeeder extends Seeder
         });
 
         $order->update(['total_amount' => $totalAmount]);
+
+        // add transaction record for the order
+        Transaction::create([
+            'user_id' => $order->user_id,
+            'transaction_id' => uniqid(),
+            'order_id' => $order->id,
+            'amount' => $order->total_amount,
+            'currency' => 'GHS',
+            'payment_method' => 'mobile_money',
+            'account_number' => $faker->creditCardNumber,
+            'payment_reference' => $faker->randomElement(['payment_ref_1', 'payment_ref_2']),
+            'payment_status' => $faker->randomElement(['pending', 'success', 'failed']),
+        ]);
     }
 
     private function createOrderItems($order)

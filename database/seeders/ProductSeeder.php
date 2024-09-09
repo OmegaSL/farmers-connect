@@ -74,13 +74,15 @@ class ProductSeeder extends Seeder
             ['name' => 'Fresh Sage', 'category' => 'Sage'],
             ['name' => 'Organic Eggplant', 'category' => 'Eggplant'],
             ['name' => 'Fresh Oregano', 'category' => 'Oregano'],
-            ['name' => 'Organic Plums', 'category' => 'Stone Fruits']
+            ['name' => 'Organic Plums', 'category' => 'Stone Fruits'],
+            ['name' => 'Heirloom Potatoes', 'category' => 'Root Vegetables'],
+            ['name' => 'Organic Lime', 'category' => 'Citrus'],
         ];
 
         foreach ($products as $product) {
             // Check if the category exists, if not create it
             $category = ProductCategory::firstOrCreate(
-                ['name' => $product['category']],
+                ['name' => $product['category'], 'slug' => Str::slug($product['category'])],
             );
 
             DB::table('products')->insert([
@@ -95,6 +97,25 @@ class ProductSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
+            // Generate 100 additional products for each category
+            for ($i = 0; $i < 100; $i++) {
+                DB::table('products')->insert([
+                    'store_id' => $stores[array_rand($stores)],
+                    'user_id' => $users[array_rand($users)],
+                    'category_id' => $category->id,
+                    'name' => $faker->unique()->sentence(1) . ' ' . $product['category'], // Unique name for each product
+                    'slug' => Str::slug($faker->unique()->sentence(1) . ' ' . $product['category']),
+                    'short_description' => $faker->sentence(),
+                    'long_description' => $faker->paragraph(),
+                    'sale_price' => $faker->randomElement([null, $faker->randomFloat(2, 0.50, 50.00)]),
+                    'base_price' => $faker->randomFloat(2, 0.50, 50.00),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
         }
+
+        $this->command->info('Products table seeded!');
     }
 }

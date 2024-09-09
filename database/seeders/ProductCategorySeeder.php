@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -36,22 +37,45 @@ class ProductCategorySeeder extends Seeder
             ['name' => 'Farm Equipment', 'subcategories' => ['Hand Tools', 'Irrigation Supplies', 'Seed Starting Supplies', 'Harvesting Tools', 'Pest Control Products', 'Fertilizers', 'Soil Amendments', 'Packaging Materials', 'Farm Apparel', 'Farm Safety Equipment']]
         ];
 
+        $uniqueCategories = [];
         foreach ($categories as $category) {
+            $found = false;
+            foreach ($uniqueCategories as $uniqueCategory) {
+                if ($category['name'] == $uniqueCategory['name'] && $category['subcategories'] == $uniqueCategory['subcategories']) {
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
+                $uniqueCategories[] = $category;
+            }
+        }
+
+        foreach ($uniqueCategories as $category) {
             $parentId = DB::table('product_categories')->insertGetId([
                 'name' => $category['name'],
+                'slug' => Str::slug($category['name']),
                 'parent_id' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
 
             foreach ($category['subcategories'] as $subcategory) {
+                $existingSubcategory = DB::table('product_categories')->where('name', $subcategory)->first();
+                if ($existingSubcategory) {
+                    continue;
+                }
+
                 DB::table('product_categories')->insert([
                     'name' => $subcategory,
+                    'slug' => Str::slug($subcategory),
                     'parent_id' => $parentId,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
             }
         }
+
+        $this->command->info('Product categories seeded successfully.');
     }
 }

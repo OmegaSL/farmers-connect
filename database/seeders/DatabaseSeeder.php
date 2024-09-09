@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             ProductVariantSeeder::class,
             OrderWithItemsSeeder::class,
+            ReviewSeeder::class,
         ]);
 
         // Promotion::factory(5)->create();

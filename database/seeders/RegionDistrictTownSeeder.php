@@ -1049,5 +1049,7 @@ class RegionDistrictTownSeeder extends Seeder
             'town_id' => null,
         ]);
         Store::factory(5)->create();
+
+        $this->command->info('Region, district and town table seeded!');
     }
 }

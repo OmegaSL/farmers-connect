@@ -33,5 +33,7 @@ class ProductVariantSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
+
+        $this->command->info('Product Variants table seeded!');
     }
 }
