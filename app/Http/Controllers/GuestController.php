@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\Store;
 use Illuminate\Http\Request;
 
 class GuestController extends Controller
@@ -42,7 +44,11 @@ class GuestController extends Controller
 
     public function stores()
     {
-        return view('livewire.guest.pages.stores');
+        $stores = Store::query()
+            ->where('status', 'active')
+            ->get();
+
+        return view('livewire.guest.pages.stores', compact('stores'));
     }
 
     public function shop_with_store($store)
@@ -57,7 +63,23 @@ class GuestController extends Controller
 
     public function product($slug)
     {
-        return view('livewire.guest.pages.product', compact('slug'));
+        $product = Product::query()
+            ->where('slug', $slug)
+            ->where('status', 'published')
+            ->firstOrFail();
+
+        $related_products = Product::query()
+            ->whereHas('variants', function ($query) {
+                $query->where('stock', '>', 0);
+            })
+            ->where('id', '!=', $product->id)
+            ->where('category_id', $product->category_id)
+            ->inRandomOrder()
+            ->where('status', 'published')
+            ->take(5)
+            ->get();
+
+        return view('livewire.guest.pages.product', compact('slug', 'product', 'related_products'));
     }
 
     public function wishlists()

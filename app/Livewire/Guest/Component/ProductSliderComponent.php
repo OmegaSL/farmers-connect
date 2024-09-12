@@ -5,11 +5,12 @@ namespace App\Livewire\Guest\Component;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\ProductCategory;
+use App\Traits\ProductActionsTrait;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class ProductSliderComponent extends Component
 {
-    use LivewireAlert;
+    use LivewireAlert, ProductActionsTrait;
 
     public ProductCategory $product_category;
 
@@ -29,16 +30,5 @@ class ProductSliderComponent extends Component
     public function render()
     {
         return view('livewire.guest.component.product-slider-component');
-    }
-
-    public function addToWishList($product_id)
-    {
-        $product = Product::find($product_id);
-
-        if (auth()->check()) {
-            $product->wishlists()->attach(auth()->user()->id);
-        }
-
-        $this->dispatch('wishlistAdded', $product_id);
     }
 }

@@ -14,9 +14,7 @@ class HeaderComponent extends Component
 
     public function mount()
     {
-        $this->wishlist_count = 0;
-
-        $this->cart_count = 0;
+        $this->countBadges();
     }
 
     public function render()
@@ -26,8 +24,9 @@ class HeaderComponent extends Component
 
     public function countBadges()
     {
+        // dd($this->wishlist_count, $this->cart_count);
         $this->wishlist_count = WishList::count();
 
-        $this->cart_count = 0;
+        $this->cart_count = \Cart::getContent()->count();
     }
 }

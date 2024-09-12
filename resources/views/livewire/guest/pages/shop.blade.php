@@ -1,8 +1,9 @@
 @extends('livewire.guest.layouts.master')
 
-@section('title', 'Store Products')
+@section('title', 'Shop Page')
 
 @section('content')
+
 
     <!-- section -->
     <section class="mt-8 mb-lg-14 mb-8">
@@ -12,7 +13,7 @@
                 <!-- col -->
                 <div class="col-lg-12">
 
-                    @livewire('guest.component.shop-products-component', ['type' => 'store', 'store_slug' => $store])
+                    @livewire('guest.component.shop-products-component', ['type' => 'shop'])
                 </div>
             </div>
         </div>

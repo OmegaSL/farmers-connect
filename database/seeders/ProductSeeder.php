@@ -94,6 +94,7 @@ class ProductSeeder extends Seeder
                 'short_description' => $faker->sentence(),
                 'long_description' => $faker->paragraph(),
                 'base_price' => $faker->randomFloat(2, 0.50, 50.00),
+                'sku' => $faker->unique()->ean8,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -110,6 +111,7 @@ class ProductSeeder extends Seeder
                     'long_description' => $faker->paragraph(),
                     'sale_price' => $faker->randomElement([null, $faker->randomFloat(2, 0.50, 50.00)]),
                     'base_price' => $faker->randomFloat(2, 0.50, 50.00),
+                    'sku' => $faker->unique()->ean8,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);

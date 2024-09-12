@@ -52,9 +52,15 @@
                     @php
                         $categories = \App\Models\ProductCategory::query()
                             ->with(['sub_categories'])
+                            ->withCount([
+                                'products' => function ($query) {
+                                    $query->where('status', 'published');
+                                },
+                            ])
                             ->whereHas('products', function ($query) {
                                 $query->where('status', 'published');
                             })
+                            ->orderBy('products_count', 'desc')
                             ->where('status', 'active')
                             ->get()
                             ->take(8);

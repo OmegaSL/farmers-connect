@@ -52,7 +52,7 @@ class OrderWithItemsSeeder extends Seeder
             'transaction_id' => uniqid(),
             'order_id' => $order->id,
             'amount' => $order->total_amount,
-            'currency' => 'GHS',
+            'currency' => '₵',
             'payment_method' => 'mobile_money',
             'account_number' => $faker->creditCardNumber,
             'payment_reference' => $faker->randomElement(['payment_ref_1', 'payment_ref_2']),

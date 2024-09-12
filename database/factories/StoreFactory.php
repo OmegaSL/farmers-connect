@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Town;
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -27,8 +28,10 @@ class StoreFactory extends Factory
             'user_id' => User::factory(),
             'town_id' => $this->faker->randomElement($townIds),
             'store_name' => $this->faker->company(),
+            'store_slug' => Str::slug($this->faker->company()),
             'address' => $this->faker->address(),
             'description' => $this->faker->paragraph(),
+            'status' => $this->faker->randomElement(['active', 'inactive']),
         ];
     }
 

@@ -28,6 +28,7 @@ class Product extends Model
         'long_description',
         'base_price',
         'sale_price',
+        'sku',
         'status'
     ];
 
@@ -52,6 +53,19 @@ class Product extends Model
             }
 
             $product->slug = $newSlug;
+
+            // generate a unique sku
+            $existingSkus = Product::where('sku', 'like', "{$product->sku}%")->pluck('sku');
+            $generate_sku = time();
+
+            for ($i = 0;; $i++) {
+                $newSku = $i ? "{$generate_sku}-{$i}" : $generate_sku;
+                if (!$existingSkus->contains($newSku)) {
+                    break;
+                }
+            }
+
+            $product->sku = $newSku;
         });
 
         // delete product images from storage when deleting the product
@@ -64,6 +78,16 @@ class Product extends Model
                 Storage::disk('public')->delete($product_image->image);
             }
         });
+    }
+
+    // get product available quantity from product variants
+    public function getAvailableQuantityAttribute()
+    {
+        $total = 0;
+        foreach ($this->variants as $variant) {
+            $total += $variant->stock;
+        }
+        return $total;
     }
 
     protected function image(): Attribute

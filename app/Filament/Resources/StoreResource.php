@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Validation\Rules\Unique;
 
 class StoreResource extends Resource
 {
@@ -39,6 +40,9 @@ class StoreResource extends Resource
                     ->relationship('town', 'name'),
                 Forms\Components\TextInput::make('store_name')
                     ->required()
+                    ->unique(modifyRuleUsing: function (Unique $rule) use ($form) {
+                        return $rule->ignore($form->model->id);
+                    })
                     ->maxLength(255),
                 Forms\Components\TextInput::make('address')
                     ->maxLength(255),

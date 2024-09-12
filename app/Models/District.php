@@ -25,7 +25,7 @@ class District extends Model
      */
     public function region(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'region_id', 'id');
+        return $this->belongsTo(Region::class, 'region_id', 'id');
     }
 
     /**

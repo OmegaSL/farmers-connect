@@ -15,7 +15,7 @@
             <div class="product-slider">
                 @foreach ($this->products as $product)
                     <!-- item -->
-                    <div class="item">
+                    <div class="item" wire:key="{{ $product->id }}">
                         <!-- item -->
                         <div class="card card-product">
                             <div class="card-body">
@@ -34,7 +34,7 @@
                                     @endphp
                                     {{-- <a href="#!"><img src="{{ $product->image }}" alt="Grocery Ecommerce Template"
                                             class="mb-3 img-fluid" /></a> --}}
-                                    <a href="#!">
+                                    <a href="{{ route('product.page', $product->slug) }}">
                                         <img src="{{ $product->image }}" alt="Grocery Ecommerce Template"
                                             class="mb-3 img-fluid"
                                             style="{{ $hasImage == null ? 'filter: blur(5px);' : '' }}" />
@@ -87,17 +87,28 @@
                                 <div class="d-flex justify-content-between align-items-center mt-3">
                                     <div>
                                         @if ($product->sale_price != null || $product->sale_price > 0)
-                                            <span class="text-dark">GHS {{ $product->sale_price }}</span>
+                                            <span class="text-dark">&#8373; {{ $product->sale_price }}</span>
                                             <span class="text-decoration-line-through text-muted">
-                                                GHS {{ $product->base_price }}
+                                                &#8373; {{ $product->base_price }}
                                             </span>
                                         @else
-                                            <span class="text-dark">GHS {{ $product->base_price }}</span>
+                                            <span class="text-dark">&#8373; {{ $product->base_price }}</span>
                                         @endif
                                     </div>
                                     <!-- btn -->
-                                    <div>
-                                        @livewire('guest.component.cart-button-component', ['product' => $product], key($product->id))
+                                    <div wire:key="{{ $product->id }}">
+                                        <a href="#!" class="btn btn-primary btn-sm">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                class="feather feather-plus">
+                                                <line x1="12" y1="5" x2="12" y2="19">
+                                                </line>
+                                                <line x1="5" y1="12" x2="19" y2="12">
+                                                </line>
+                                            </svg>
+                                            Add
+                                        </a>
                                     </div>
                                 </div>
                             </div>

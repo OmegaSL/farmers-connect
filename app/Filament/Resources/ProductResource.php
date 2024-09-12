@@ -10,6 +10,7 @@ use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use App\Models\ProductCategory;
 use Filament\Resources\Resource;
+use Illuminate\Validation\Rules\Unique;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ProductResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -61,6 +62,9 @@ class ProductResource extends Resource
                             ->getOptionLabelUsing(fn($value): ?string => ProductCategory::find($value)?->name)
                             ->label(trans('Select Category')),
                         Forms\Components\TextInput::make('name')
+                            ->unique(modifyRuleUsing: function (Unique $rule) use ($form) {
+                                return $rule->ignore($form->model->id);
+                            })
                             ->reactive()
                             ->afterStateUpdated(fn($state, callable $set) => $set('slug', Str::slug($state)))
                             ->required()
@@ -158,7 +162,7 @@ class ProductResource extends Resource
                     ->rounded(),
                 Tables\Columns\TextColumn::make('base_price')
                     ->numeric()
-                    ->formatStateUsing(fn($state): string => 'GHS ' . number_format($state, 2))
+                    ->formatStateUsing(fn($state): string => '₵ ' . number_format($state, 2))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()

@@ -10,6 +10,7 @@ use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Spatie\Permission\Models\Role;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Validation\Rules\Unique;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\DateTimePicker;
@@ -69,6 +70,9 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('last_name')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
+                    ->unique(modifyRuleUsing: function (Unique $rule) use ($form) {
+                        return $rule->ignore($form->model->id);
+                    })
                     ->email()
                     ->required()
                     ->maxLength(255),

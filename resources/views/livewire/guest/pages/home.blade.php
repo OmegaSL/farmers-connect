@@ -309,7 +309,7 @@
     @endforeach
 
     <!-- cta section -->
-    <section>
+    {{-- <section>
         <div class="container">
             <hr class="my-lg-14 my-8" />
             <!-- row -->
@@ -375,7 +375,7 @@
             </div>
             <hr class="my-lg-14 my-8" />
         </div>
-    </section>
+    </section> --}}
     <!-- featured section -->
     <section class="my-lg-14 my-8">
         <div class="container">
@@ -384,7 +384,8 @@
                 <div class="col-md-6 col-lg-3">
                     <div class="mb-8 mb-lg-0">
                         <!-- img -->
-                        <div class="mb-6"><img src="../assets/images/icons/clock.svg" alt="" /></div>
+                        <div class="mb-6"><img src="{{ asset('assets/images/icons/clock.svg') }}" alt="" />
+                        </div>
                         <!-- title -->
                         <h3 class="h5 mb-3">10 minute grocery now</h3>
                         <!-- text -->
@@ -396,7 +397,8 @@
                 <div class="col-md-6 col-lg-3">
                     <div class="mb-8 mb-lg-0">
                         <!-- img -->
-                        <div class="mb-6"><img src="../assets/images/icons/gift.svg" alt="" /></div>
+                        <div class="mb-6"><img src="{{ asset('assets/images/icons/gift.svg') }}" alt="" />
+                        </div>
                         <!-- title -->
                         <h3 class="h5 mb-3">Best Prices & Offers</h3>
                         <!-- text -->
@@ -407,7 +409,8 @@
                 <div class="col-md-6 col-lg-3">
                     <div class="mb-8 mb-lg-0">
                         <!-- img -->
-                        <div class="mb-6"><img src="../assets/images/icons/package.svg" alt="" /></div>
+                        <div class="mb-6"><img src="{{ asset('assets/images/icons/package.svg') }}" alt="" />
+                        </div>
                         <!-- title -->
                         <h3 class="h5 mb-3">Wide Assortment</h3>
                         <!-- text -->
@@ -418,7 +421,8 @@
                 <div class="col-md-6 col-lg-3">
                     <div class="mb-8 mb-lg-0">
                         <!-- img -->
-                        <div class="mb-6"><img src="../assets/images/icons/refresh-cw.svg" alt="" />
+                        <div class="mb-6"><img src="{{ asset('assets/images/icons/refresh-cw.svg') }}"
+                                alt="" />
                         </div>
                         <!-- title -->
                         <h3 class="h5 mb-3">Easy Returns</h3>

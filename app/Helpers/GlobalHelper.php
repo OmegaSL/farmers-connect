@@ -41,4 +41,36 @@ class GlobalHelper
 
         return '<small class="text-warning">' . $stars . '</small> <span class="text-muted small">' . $rating . '(' . $reviews . ')</span>';
     }
+
+    /**
+     * Display rating stars and count in a span element, specifically for the single item page.
+     *
+     * @param float $rating The product rating.
+     * @param int $reviews The number of product reviews.
+     * @return string The HTML element containing the rating.
+     */
+    static function displayReviewStarsForSingleItemPage($rating, $reviews)
+    {
+        $stars = '';
+        $fullStars = floor($rating);
+        $halfStar = $rating - $fullStars >= 0.5;
+
+        for ($i = 1; $i <= 5; $i++) {
+            if ($i <= $fullStars) {
+                $stars .= '<i class="bi bi-star-fill"></i>';
+            } elseif ($halfStar && $i == $fullStars + 1) {
+                $stars .= '<i class="bi bi-star-half"></i>';
+                $halfStar = false;
+            } else {
+                $stars .= '<i class="bi bi-star"></i>';
+            }
+        }
+
+        return '<small class="text-warning">' . $stars . '</small> <a href="#" class="ms-2">(' . $reviews . ' reviews)</a>';
+    }
+
+    static function percentageOff($original_price, $sale_price)
+    {
+        return round((($original_price - $sale_price) / $original_price) * 100) . '% OFF';
+    }
 }
