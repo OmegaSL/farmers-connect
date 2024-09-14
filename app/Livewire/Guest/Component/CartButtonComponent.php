@@ -4,6 +4,7 @@ namespace App\Livewire\Guest\Component;
 
 use App\Helpers\GlobalHelper;
 use App\Models\Product;
+use App\Models\WishList;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
@@ -27,10 +28,10 @@ class CartButtonComponent extends Component
         $rowId = "product_{{$this->product->id}}";
 
         // check if the product has variants
-        if ($this->product->variants->count() == 0) {
-            $this->alert('error', 'This product has no stock available.');
-            return;
-        }
+        // if ($this->product->variants->count() == 0) {
+        //     $this->alert('error', 'This product has no stock available.');
+        //     return;
+        // }
 
         // pick the first variant from the product
         $product_variant = $this->product->variants->first();
@@ -50,11 +51,11 @@ class CartButtonComponent extends Component
         $product = [
             'id' => $rowId,
             'name' => $this->product->name,
-            'price' => $this->product->sale_price ?? $this->product->base_price,
+            'price' => $this->product->sale_price ?? $this->product->base_price + $product_variant?->price ?? 0,
             'quantity' => $this->quantity,
             'attributes' => [
                 'product' => $this->product,
-                'variant' => $product_variant,
+                'variant' => $product_variant ?? null,
             ],
             'conditions' => $saleCondition
         ];
@@ -75,5 +76,24 @@ class CartButtonComponent extends Component
         $this->dispatch('cartPreview');
 
         $this->alert('success', 'Product added to cart.');
+    }
+
+    public function moveToCart($rowId)
+    {
+        $this->product = Product::find($rowId);
+
+        $this->addToCart();
+
+        $wishlists = WishList::query()->where('user_id', auth()->user()?->id)->get();
+        foreach ($wishlists as $wishlist) {
+            if ($wishlist->product_id == $rowId) {
+                $wishlist->delete();
+            }
+        }
+
+        // \Cart::remove($rowId);
+        // \Cart::add($product);
+        $this->dispatch('wishlistPreview');
+        $this->alert('success', 'Product moved to cart.');
     }
 }

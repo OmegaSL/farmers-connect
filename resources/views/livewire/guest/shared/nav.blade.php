@@ -116,23 +116,23 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('stores.page') }}">Stores</a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link" href="{{ route('about_us.page') }}">About us</a>
-                        </li>
-                        <li class="nav-item">
+                        </li> --}}
+                        {{-- <li class="nav-item">
                             <a class="nav-link" href="{{ route('contact_us.page') }}">Contact</a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">Account</a>
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">Account</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="account-orders.html">Orders</a></li>
-                                <li><a class="dropdown-item" href="account-settings.html">Settings</a></li>
-                                <li><a class="dropdown-item" href="account-address.html">Address</a></li>
+                                <li><a class="dropdown-item" href="{{ route('user.orders') }}">Orders</a></li>
+                                <li><a class="dropdown-item" href="#!">Settings</a></li>
+                                {{-- <li><a class="dropdown-item" href="account-address.html">Address</a></li>
                                 <li><a class="dropdown-item" href="account-payment-method.html">Payment
-                                        Method</a></li>
-                                <li><a class="dropdown-item" href="account-notification.html">Notification</a>
-                                </li>
+                                        Method</a></li> --}}
+                                {{-- <li><a class="dropdown-item" href="account-notification.html">Notification</a>
+                                </li> --}}
                             </ul>
                         </li>
                         {{-- <li class="nav-item">

@@ -16,4 +16,13 @@ Route::get('/shop/store/{store}', [App\Http\Controllers\GuestController::class, 
 Route::get('/shop/category/{category}', [App\Http\Controllers\GuestController::class, 'shop_with_category'])->name('shop.page.with.category');
 
 Route::get('/shop/{slug}', [App\Http\Controllers\GuestController::class, 'product'])->name('product.page');
-Route::get('/wishlists', [App\Http\Controllers\GuestController::class, 'wishlists'])->name('wishlists.page');
+Route::get('/wishlists', App\Livewire\Guest\Pages\Wishlists::class)->name('wishlists.page');
+Route::get('/cart', App\Livewire\Guest\Pages\CartPreview::class)->name('cart.page');
+Route::get('/checkout', App\Livewire\Guest\Pages\Checkout::class)->name('checkout.page');
+
+Route::get('/sign-in', App\Livewire\Guest\Pages\SigninComponent::class)->name('login');
+
+Route::group(['middleware' => 'auth:guest'], function () {
+    Route::get('/orders', App\Livewire\Guest\Dashboard\OrdersComponent::class)->name('user.orders');
+    Route::get('/logout', [App\Http\Controllers\GuestController::class, 'logout'])->name('logout');
+});

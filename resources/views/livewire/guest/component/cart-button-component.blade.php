@@ -4,6 +4,10 @@
             <i class="feather-icon icon-shopping-bag me-2"></i>
             Add to cart
         </button>
+    @elseif ($type == 'wishlist')
+        <div class="btn btn-primary btn-sm" wire:click.prevent='moveToCart({{ $product->id }})'>
+            Add to Cart
+        </div>
     @else
         <a href="#!" wire:click.prevent='addToCart' class="btn btn-primary btn-sm">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"

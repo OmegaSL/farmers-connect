@@ -31,7 +31,7 @@ class User extends Authenticatable implements FilamentUser
         'profile_pic',
         'email',
         'password',
-        'otp_code',
+        'otp',
         'otp_expires_at',
         'user_type',
         'status',
@@ -120,5 +120,15 @@ class User extends Authenticatable implements FilamentUser
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class, 'user_id', 'id');
+    }
+
+    /**
+     * Get all of the wishlists for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function wishlists(): HasMany
+    {
+        return $this->hasMany(WishList::class, 'user_id', 'id');
     }
 }

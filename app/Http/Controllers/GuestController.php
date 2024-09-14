@@ -13,14 +13,28 @@ class GuestController extends Controller
     {
         $product_categories = ProductCategory::query()
             ->withCount('products')
+            ->with(
+                ['products' => function ($query) {
+                    $query->where('status', 'published');
+                    // ->whereHas(
+                    //     'variants',
+                    //     function ($query) {
+                    //         $query->where('stock', '>', 0);
+                    //     }
+                    // );
+                }]
+            )
             // get the top 3 categories with the most products
             ->orderBy('products_count', 'desc')
             ->where('parent_id', null)
             ->whereHas('products', function ($query) {
                 $query->where('status', 'published');
+                // ->whereHas('variants', function ($query) {
+                //     $query->where('stock', '>', 0);
+                // });
             })
             ->where('status', 'active')
-            ->take(3)
+            // ->take(3)
             ->get()
             ->shuffle();
 
@@ -82,8 +96,10 @@ class GuestController extends Controller
         return view('livewire.guest.pages.product', compact('slug', 'product', 'related_products'));
     }
 
-    public function wishlists()
+    public function logout()
     {
-        return view('livewire.guest.pages.wishlists');
+        auth()->guard('guest')->logout();
+
+        return redirect()->route('home.page');
     }
 }

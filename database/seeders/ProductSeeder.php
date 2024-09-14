@@ -100,22 +100,22 @@ class ProductSeeder extends Seeder
             ]);
 
             // Generate 100 additional products for each category
-            for ($i = 0; $i < 100; $i++) {
-                DB::table('products')->insert([
-                    'store_id' => $stores[array_rand($stores)],
-                    'user_id' => $users[array_rand($users)],
-                    'category_id' => $category->id,
-                    'name' => $faker->unique()->sentence(1) . ' ' . $product['category'], // Unique name for each product
-                    'slug' => Str::slug($faker->unique()->sentence(1) . ' ' . $product['category']),
-                    'short_description' => $faker->sentence(),
-                    'long_description' => $faker->paragraph(),
-                    'sale_price' => $faker->randomElement([null, $faker->randomFloat(2, 0.50, 50.00)]),
-                    'base_price' => $faker->randomFloat(2, 0.50, 50.00),
-                    'sku' => $faker->unique()->ean8,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            }
+            // for ($i = 0; $i < 10; $i++) {
+            //     DB::table('products')->insert([
+            //         'store_id' => $stores[array_rand($stores)],
+            //         'user_id' => $users[array_rand($users)],
+            //         'category_id' => $category->id,
+            //         'name' => $faker->unique()->sentence(1) . ' ' . $product['category'], // Unique name for each product
+            //         'slug' => Str::slug($faker->unique()->sentence(1) . ' ' . $product['category']),
+            //         'short_description' => $faker->sentence(),
+            //         'long_description' => $faker->paragraph(),
+            //         'sale_price' => $faker->randomElement([null, $faker->randomFloat(2, 0.50, 50.00)]),
+            //         'base_price' => $faker->randomFloat(2, 0.50, 50.00),
+            //         'sku' => $faker->unique()->ean8,
+            //         'created_at' => now(),
+            //         'updated_at' => now(),
+            //     ]);
+            // }
         }
 
         $this->command->info('Products table seeded!');

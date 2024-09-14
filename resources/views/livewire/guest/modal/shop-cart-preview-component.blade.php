@@ -29,7 +29,7 @@
                                                 ->where('id', $cart['attributes']['product']->id)
                                                 ->first()->image;
                                         @endphp
-                                        <img src="{{ $cart['attributes']['product']->image }}" alt="Ecommerce"
+                                        <img src="{{ $cart['attributes']['product']->image }}" alt="{{ $cart['name'] }}"
                                             style="{{ $hasImage == null ? 'filter: blur(5px);' : '' }}"
                                             class="icon-shape icon-xxl" />
                                         <div class="ms-3">
@@ -38,10 +38,12 @@
                                                 <h6 class="mb-0">{{ $cart['name'] }}</h6>
                                             </a>
                                             <span><small
-                                                    class="text-muted">{{ $cart['attributes']['variant']->variant_name }}</small></span>
+                                                    class="text-muted">{{ $cart['attributes']['variant']?->variant_name ?? '' }}</small></span>
                                             <!-- text -->
                                             <div class="mt-2 small lh-1">
-                                                <a href="#!" class="text-decoration-none text-inherit">
+                                                <a href="#!"
+                                                    wire:click.prevent="removeFromCart('{{ $cart['id'] }}')"
+                                                    class="text-decoration-none text-inherit">
                                                     <span class="me-1 align-text-bottom">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="14"
                                                             height="14" viewBox="0 0 24 24" fill="none"
@@ -58,8 +60,7 @@
                                                                 y2="17"></line>
                                                         </svg>
                                                     </span>
-                                                    <span class="text-muted"
-                                                        wire:click.prevent="removeFromCart('{{ $cart['id'] }}')">Remove</span>
+                                                    <span class="text-muted">Remove</span>
                                                 </a>
                                             </div>
                                         </div>
@@ -109,7 +110,7 @@
                 <!-- btn -->
                 <div class="d-flex justify-content-between mt-4">
                     <a href="{{ route('shop.page') }}" class="btn btn-primary">Continue Shopping</a>
-                    <a href="#!" wire:click.prevent="updateCart()" class="btn btn-dark">Update Cart</a>
+                    <a href="{{ route('cart.page') }}" class="btn btn-dark">Go to Cart</a>
                 </div>
             </div>
         </div>

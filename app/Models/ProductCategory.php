@@ -39,7 +39,7 @@ class ProductCategory extends Model
     protected function image(): Attribute
     {
         return Attribute::make(
-            get: fn(?string $value) => $value ? asset('storage/' . $value) : asset('assets/images/products/download.jpg'),
+            get: fn(?string $value) => $value ? asset('storage/' . $value) : asset('assets/images/category/category-fruits-vegetables.jpg'),
         );
     }
 

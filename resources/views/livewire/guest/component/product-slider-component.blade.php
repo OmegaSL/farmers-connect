@@ -65,7 +65,7 @@
                                 <h2 class="fs-6">
                                     <a href="{{ route('product.page', $product->slug) }}"
                                         class="text-inherit text-decoration-none">
-                                        {{ Str::limit($product->short_description, 30, '...') }}
+                                        {!! Str::limit($product->short_description, 30, '...') !!}
                                     </a>
                                 </h2>
                                 <div>
@@ -97,7 +97,9 @@
                                     </div>
                                     <!-- btn -->
                                     <div wire:key="{{ $product->id }}">
-                                        <a href="#!" class="btn btn-primary btn-sm">
+                                        <a href="{{ route('product.page', $product->slug) }}"
+                                            class="btn btn-primary
+                                            btn-sm">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -107,7 +109,7 @@
                                                 <line x1="5" y1="12" x2="19" y2="12">
                                                 </line>
                                             </svg>
-                                            Add
+                                            View
                                         </a>
                                     </div>
                                 </div>

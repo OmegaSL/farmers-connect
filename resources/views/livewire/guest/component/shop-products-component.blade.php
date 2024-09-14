@@ -132,7 +132,7 @@
                         <h2 class="fs-6">
                             <a href="{{ route('product.page', $product->slug) }}"
                                 class="text-inherit text-decoration-none">
-                                {{ Str::limit($product->short_description, 30, '...') }}
+                                {!! Str::limit($product->short_description, 30, '...') !!}
                             </a>
                         </h2>
                         <div>

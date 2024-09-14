@@ -62,10 +62,10 @@ class ProductResource extends Resource
                             ->getOptionLabelUsing(fn($value): ?string => ProductCategory::find($value)?->name)
                             ->label(trans('Select Category')),
                         Forms\Components\TextInput::make('name')
-                            ->unique(modifyRuleUsing: function (Unique $rule) use ($form) {
-                                return $rule->ignore($form->model->id);
-                            })
-                            ->reactive()
+                            // ->unique(modifyRuleUsing: function (Unique $rule) use ($form) {
+                            //     return $rule->ignore($form->model?->id);
+                            // })
+                            // ->reactive()
                             ->afterStateUpdated(fn($state, callable $set) => $set('slug', Str::slug($state)))
                             ->required()
                             ->maxLength(255),
@@ -159,7 +159,7 @@ class ProductResource extends Resource
                 Tables\Columns\ImageColumn::make('image')
                     ->label('Image')
                     ->toggleable()
-                    ->rounded(),
+                    ->circular(),
                 Tables\Columns\TextColumn::make('base_price')
                     ->numeric()
                     ->formatStateUsing(fn($state): string => '₵ ' . number_format($state, 2))

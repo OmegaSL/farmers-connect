@@ -78,12 +78,12 @@
                                     </div>
                                     <hr class="my-6" />
                                     <div class="mb-4">
-                                        @foreach ($product->variants as $variant)
+                                        {{-- @foreach ($product->variants as $variant)
                                             <button type="button" wire:click='selectVariant({{ $variant->id }})'
                                                 class="btn btn-secondary {{ $this->selectedVariant == $variant->id ? 'active disabled' : '' }}">
                                                 {{ $variant->variant_name }}
                                             </button>
-                                        @endforeach
+                                        @endforeach --}}
                                         {{-- <button type="button" class="btn btn-outline-secondary">500g</button>
                                         <button type="button" class="btn btn-outline-secondary">1kg</button> --}}
                                     </div>

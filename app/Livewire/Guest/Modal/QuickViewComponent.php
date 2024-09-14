@@ -46,6 +46,10 @@ class QuickViewComponent extends Component
 
     public function updateProductPrice($variant_id)
     {
-        $this->price += $this->product->variants->find($variant_id)->price;
+        // $this->price += $this->product?->variants?->find($variant_id)->price;
+
+        $variant_price = $this->product?->variants?->find($variant_id)->price ?? 0 + (float) $this->product?->base_price;
+
+        $this->price = $variant_price == 0 ? 0 + (float) $this->product?->base_price : $variant_price;
     }
 }

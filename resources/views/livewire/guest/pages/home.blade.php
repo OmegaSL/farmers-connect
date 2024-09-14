@@ -127,184 +127,35 @@
             </div>
             <!-- row -->
             <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xxl-6 g-6">
-                <!-- col -->
-                <div class="col">
-                    <a href="shop-grid.html" class="text-decoration-none text-inherit">
-                        <!-- card -->
-                        <div class="card card-product">
-                            <div class="card-body text-center py-8">
-                                <!-- img -->
-                                <img src="../assets/images/category/category-dairy-bread-eggs.jpg"
-                                    alt="Grocery Ecommerce Template" class="mb-3" />
-                                <!-- text -->
-                                <div class="text-truncate">Dairy, Bread & Eggs</div>
+                @foreach ($product_categories->take(12) as $product_category)
+                    <!-- col -->
+                    <div class="col">
+                        <a href="{{ route('shop.page.with.category', $product_category->slug) }}"
+                            class="text-decoration-none text-inherit">
+                            <!-- card -->
+                            @php
+                                $categoryHasImage = \Illuminate\Support\Facades\DB::table('product_categories')
+                                    ->where('id', $product_category->id)
+                                    ->first()->image;
+                            @endphp
+                            <div class="card card-product">
+                                <div class="card-body text-center py-8">
+                                    <!-- img -->
+                                    <img src="{{ $product_category->image }}"
+                                        style="{{ $categoryHasImage == null ? 'filter: blur(5px);' : '' }}"
+                                        alt="Grocery Ecommerce Template" class="mb-3" />
+                                    <!-- text -->
+                                    <div class="text-truncate">{{ $product_category->name }}</div>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-                <!-- col -->
-                <div class="col">
-                    <a href="shop-grid.html" class="text-decoration-none text-inherit">
-                        <!-- card -->
-                        <div class="card card-product">
-                            <div class="card-body text-center py-8">
-                                <!-- img -->
-                                <img src="../assets/images/category/category-snack-munchies.jpg"
-                                    alt="Grocery Ecommerce Template" class="mb-3" />
-                                <!-- text -->
-                                <div class="text-truncate">Snack & Munchies</div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <!-- col -->
-                <div class="col">
-                    <a href="shop-grid.html" class="text-decoration-none text-inherit">
-                        <!-- card -->
-                        <div class="card card-product">
-                            <div class="card-body text-center py-8">
-                                <!-- img -->
-                                <img src="../assets/images/category/category-bakery-biscuits.jpg"
-                                    alt="Grocery Ecommerce Template" class="mb-3" />
-                                <!-- text -->
-                                <div class="text-truncate">Bakery & Biscuits</div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <!-- col -->
-                <div class="col">
-                    <a href="shop-grid.html" class="text-decoration-none text-inherit">
-                        <!-- card -->
-                        <div class="card card-product">
-                            <div class="card-body text-center py-8">
-                                <!-- img -->
-                                <img src="../assets/images/category/category-instant-food.jpg"
-                                    alt="Grocery Ecommerce Template" class="mb-3" />
-                                <div class="text-truncate">Instant Food</div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <!-- col -->
-                <div class="col">
-                    <a href="shop-grid.html" class="text-decoration-none text-inherit">
-                        <!-- card -->
-                        <div class="card card-product">
-                            <div class="card-body text-center py-8">
-                                <!-- img -->
-                                <img src="../assets/images/category/category-tea-coffee-drinks.jpg"
-                                    alt="Grocery Ecommerce Template" class="mb-3" />
-                                <div class="text-truncate">Tea, Coffee & Drinks</div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col">
-                    <a href="shop-grid.html" class="text-decoration-none text-inherit">
-                        <div class="card card-product">
-                            <div class="card-body text-center py-8">
-                                <img src="../assets/images/category/category-fruits-vegetables.jpg"
-                                    alt="Grocery Ecommerce Template" class="mb-3" />
-                                <div class="text-truncate">Fruits & Vegetables</div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <!-- col -->
-                <div class="col">
-                    <a href="shop-grid.html" class="text-decoration-none text-inherit">
-                        <!-- card -->
-                        <div class="card card-product">
-                            <div class="card-body text-center py-8">
-                                <!-- img -->
-                                <img src="../assets/images/category/category-cold-drinks-juices.jpg"
-                                    alt="Grocery Ecommerce Template" class="mb-3" />
-                                <!-- text -->
-                                <div class="text-truncate">Cold Drinks & Juices</div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <!-- col -->
-                <div class="col">
-                    <a href="shop-grid.html" class="text-decoration-none text-inherit">
-                        <!-- card -->
-                        <div class="card card-product">
-                            <div class="card-body text-center py-8">
-                                <!-- img -->
-                                <img src="../assets/images/category/category-chicken-meat-fish.jpg"
-                                    alt="Grocery Ecommerce Template" class="mb-3" />
-                                <div class="text-truncate">Chicken, Meat & Fish</div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <!-- col -->
-                <div class="col">
-                    <a href="shop-grid.html" class="text-decoration-none text-inherit">
-                        <!-- card -->
-                        <div class="card card-product">
-                            <div class="card-body text-center py-8">
-                                <!-- img -->
-                                <img src="../assets/images/category/category-baby-care.jpg" alt="Grocery Ecommerce Template"
-                                    class="mb-3" />
-                                <!-- text -->
-                                <div class="text-truncate">Baby Care</div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <!-- text -->
-                <div class="col">
-                    <a href="shop-grid.html" class="text-decoration-none text-inherit">
-                        <!-- card -->
-                        <div class="card card-product">
-                            <div class="card-body text-center py-8">
-                                <!-- img -->
-                                <img src="../assets/images/category/category-cleaning-essentials.jpg"
-                                    alt="Grocery Ecommerce Template" class="mb-3" />
-                                <!-- text -->
-                                <div class="text-truncate">Cleaning Essentials</div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <!-- col -->
-                <div class="col">
-                    <a href="shop-grid.html" class="text-decoration-none text-inherit">
-                        <!-- card -->
-                        <div class="card card-product">
-                            <div class="card-body text-center py-8">
-                                <!-- img -->
-                                <img src="../assets/images/category/category-pet-care.jpg"
-                                    alt="Grocery Ecommerce Template" class="mb-3" />
-                                <!-- text -->
-                                <div class="text-truncate">Pet Care</div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <!-- col -->
-                <div class="col">
-                    <a href="shop-grid.html" class="text-decoration-none text-inherit">
-                        <!-- card -->
-                        <div class="card card-product">
-                            <div class="card-body text-center py-8">
-                                <!-- img -->
-                                <img src="../assets/images/category/category-atta-rice-dal.jpg"
-                                    alt="Grocery Ecommerce Template" class="mb-3" />
-                                <!-- text -->
-                                <div class="text-truncate">Atta, Rice & Dal</div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
+                @endforeach
             </div>
         </div>
     </section>
 
-    @foreach ($product_categories as $product_category)
+    @foreach ($product_categories->take(3) as $product_category)
         @livewire('guest.component.product-slider-component', ['product_category' => $product_category], key($product_category->id))
     @endforeach
 
@@ -421,8 +272,7 @@
                 <div class="col-md-6 col-lg-3">
                     <div class="mb-8 mb-lg-0">
                         <!-- img -->
-                        <div class="mb-6"><img src="{{ asset('assets/images/icons/refresh-cw.svg') }}"
-                                alt="" />
+                        <div class="mb-6"><img src="{{ asset('assets/images/icons/refresh-cw.svg') }}" alt="" />
                         </div>
                         <!-- title -->
                         <h3 class="h5 mb-3">Easy Returns</h3>
