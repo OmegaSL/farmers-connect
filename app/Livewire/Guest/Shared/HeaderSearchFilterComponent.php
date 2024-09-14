@@ -136,6 +136,7 @@ class HeaderSearchFilterComponent extends Component
             })
             ->where('status', 'published')
             ->get()
+            ->take(15)
             ->toArray();
 
         // $this->products = Product::where(function (Builder $query) {
