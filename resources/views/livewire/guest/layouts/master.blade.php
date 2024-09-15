@@ -11,8 +11,9 @@
 
     <meta property="og:url" content="{{ url()->current() }}" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Your Website Title" />
-    <meta property="og:description" content="Your description" />
+    <meta property="og:title" content="{{ config('app.name') }}" />
+    <meta property="og:description"
+        content="Famers Connect is a platform for farmers to connect with each other and sell their products online" />
     <meta property="og:image" content="{{ asset('assets/images/logo/freshcart-logo.svg') }}" />
 
     <link href="{{ asset('assets/libs/tiny-slider/dist/tiny-slider.css') }}" rel="stylesheet" />
