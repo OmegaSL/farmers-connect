@@ -29,7 +29,7 @@ class HeaderSearchFilterComponent extends Component
 
     public function render()
     {
-        $wishlist_count = \App\Models\Wishlist::query()
+        $wishlist_count = \App\Models\WishList::query()
             ->where('user_id', auth()->id())
             ->count() ?? 0;
 
