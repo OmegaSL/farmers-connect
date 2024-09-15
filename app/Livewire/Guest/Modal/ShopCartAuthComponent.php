@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Guest\Modal;
 
+use App\Models\User;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
@@ -66,6 +67,12 @@ class ShopCartAuthComponent extends Component
             'name' => 'required',
             'email' => 'required|email',
             'password' => 'required',
+        ]);
+
+        $user = User::create([
+            'name' => $this->name,
+            'email' => $this->email,
+            'password' => bcrypt($this->password),
         ]);
 
         $user = auth()->guard('guest')->attempt([
