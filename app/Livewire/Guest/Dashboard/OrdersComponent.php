@@ -17,6 +17,7 @@ class OrdersComponent extends Component
     {
         return view('livewire.guest.dashboard.orders-component', [
             'order_items' => OrderItem::query()
+                ->with(['order', 'product'])
                 ->latest()
                 ->whereHas('order', function ($query) {
                     $query->where('user_id', auth()->guard('guest')->user()?->id);
