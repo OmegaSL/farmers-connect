@@ -3,7 +3,7 @@ name: Laravel
 on:
   push:
     branches:
-      - master # The branch name you are committing the new changes
+      - main # The branch name you are committing the new changes
 
 jobs:
   build:
