@@ -15,7 +15,8 @@ class GuestController extends Controller
             ->withCount('products')
             ->with(
                 ['products' => function ($query) {
-                    $query->where('status', 'published');
+                    $query->where('status', 'published')
+                        ->where('stock', '>', 0);
                     // ->whereHas(
                     //     'variants',
                     //     function ($query) {
@@ -26,7 +27,7 @@ class GuestController extends Controller
             )
             // get the top 3 categories with the most products
             ->orderBy('products_count', 'desc')
-            ->where('parent_id', null)
+            // ->where('parent_id', null)
             ->whereHas('products', function ($query) {
                 $query->where('status', 'published');
                 // ->whereHas('variants', function ($query) {
@@ -35,8 +36,8 @@ class GuestController extends Controller
             })
             ->where('status', 'active')
             // ->take(3)
-            ->get()
-            ->shuffle();
+            ->get();
+        // ->shuffle()
 
         return view('livewire.guest.pages.home', compact('product_categories'));
     }

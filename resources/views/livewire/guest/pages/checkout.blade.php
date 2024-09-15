@@ -160,14 +160,15 @@
                                     <div class="mt-5">
                                         <label for="DeliveryInstructions" class="form-label sr-only">Delivery
                                             instructions</label>
-                                        <textarea class="form-control" id="DeliveryInstructions" rows="3" placeholder="Write delivery instructions "></textarea>
+                                        <textarea class="form-control" id="DeliveryInstructions" rows="3" wire:model.blur='description'
+                                            placeholder="Write delivery instructions "></textarea>
                                         <p class="form-text">Add instructions for how you want your order shopped
                                             and/or
                                             delivered</p>
                                         <div class="mt-5 d-flex justify-content-end">
                                             <a href="#" class="btn btn-outline-gray-400 text-muted"
-                                                data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo"
-                                                aria-expanded="false" aria-controls="flush-collapseTwo">
+                                                data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
+                                                aria-expanded="false" aria-controls="flush-collapseOne">
                                                 Prev
                                             </a>
                                             <a href="#" class="btn btn-primary ms-2" data-bs-toggle="collapse"
@@ -332,7 +333,8 @@
                                                     aria-expanded="false" aria-controls="flush-collapseThree">
                                                     Prev
                                                 </a>
-                                                <a href="#" class="btn btn-primary ms-2">Place Order</a>
+                                                <a href="#" wire:click.prevent='confirmOrderPlaced'
+                                                    class="btn btn-primary ms-2">Place Order</a>
                                             </div>
                                         </div>
                                     </div>
@@ -346,106 +348,75 @@
                             <div class="card shadow-sm">
                                 <h5 class="px-6 py-4 bg-transparent mb-0">Order Details</h5>
                                 <ul class="list-group list-group-flush">
-                                    <!-- list group item -->
-                                    <li class="list-group-item px-4 py-3">
-                                        <div class="row align-items-center">
-                                            <div class="col-2 col-md-2">
-                                                <img src="../assets/images/products/product-img-1.jpg" alt="Ecommerce"
-                                                    class="img-fluid" />
+                                    @forelse ($this->cart as $cart_item)
+                                        <!-- list group item -->
+                                        <li class="list-group-item px-4 py-3">
+                                            <div class="row align-items-center">
+                                                @php
+                                                    $hasImage = \Illuminate\Support\Facades\DB::table('products')
+                                                        ->where('id', $cart_item['attributes']['product']->id)
+                                                        ->first()->image;
+                                                @endphp
+                                                <div class="col-2 col-md-2">
+                                                    <img src="{{ $cart_item['attributes']['product']->image }}"
+                                                        alt="{{ $cart_item['name'] }}"
+                                                        style="{{ $hasImage == null ? 'filter: blur(5px);' : '' }}"
+                                                        class="img-fluid" />
+                                                </div>
+                                                <div class="col-5 col-md-5">
+                                                    <h6 class="mb-0">{{ $cart_item['name'] }}</h6>
+                                                    {{-- <span><small class="text-muted">250g</small></span> --}}
+                                                </div>
+                                                <div class="col-2 col-md-2 text-center text-muted">
+                                                    <span>{{ $cart_item['quantity'] }}</span>
+                                                </div>
+                                                <div class="col-3 text-lg-end text-start text-md-end col-md-3">
+                                                    @if ($cart_item['attributes']['product']->sale_price != null || $cart_item['attributes']['product']->sale_price > 0)
+                                                        <span class="fw-bold">&#8373;
+                                                            {{ $cart_item['attributes']['product']->sale_price }}</span>
+                                                        <div class="text-decoration-line-through text-muted small">
+                                                            &#8373;
+                                                            {{ $cart_item['attributes']['product']->base_price }}</div>
+                                                    @else
+                                                        <span class="fw-bold">&#8373;
+                                                            {{ $cart_item['attributes']['product']->base_price }}</span>
+                                                    @endif
+                                                </div>
                                             </div>
-                                            <div class="col-5 col-md-5">
-                                                <h6 class="mb-0">Haldiram's Sev Bhujia</h6>
-                                                <span><small class="text-muted">.98 / lb</small></span>
+                                        </li>
+                                    @empty
+                                        <li class="list-group-item px-4 py-3">
+                                            <div class="row align-items-center">
+                                                <div class="bg-light p-4">
+                                                    <i class="feather-icon icon-shopping-cart text-muted"></i>
+                                                </div>
+                                                <div class="col-12">
+                                                    <h6 class="mb-0">Your cart is empty</h6>
+                                                </div>
                                             </div>
-                                            <div class="col-2 col-md-2 text-center text-muted">
-                                                <span>1</span>
-                                            </div>
-                                            <div class="col-3 text-lg-end text-start text-md-end col-md-3">
-                                                <span class="fw-bold">$5.00</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!-- list group item -->
-                                    <li class="list-group-item px-4 py-3">
-                                        <div class="row align-items-center">
-                                            <div class="col-2 col-md-2">
-                                                <img src="../assets/images/products/product-img-2.jpg" alt="Ecommerce"
-                                                    class="img-fluid" />
-                                            </div>
-                                            <div class="col-5 col-md-5">
-                                                <h6 class="mb-0">NutriChoice Digestive</h6>
-                                                <span><small class="text-muted">250g</small></span>
-                                            </div>
-                                            <div class="col-2 col-md-2 text-center text-muted">
-                                                <span>1</span>
-                                            </div>
-                                            <div class="col-3 text-lg-end text-start text-md-end col-md-3">
-                                                <span class="fw-bold">$20.00</span>
-                                                <div class="text-decoration-line-through text-muted small">$26.00</div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!-- list group item -->
-                                    <li class="list-group-item px-4 py-3">
-                                        <div class="row align-items-center">
-                                            <div class="col-2 col-md-2">
-                                                <img src="../assets/images/products/product-img-3.jpg" alt="Ecommerce"
-                                                    class="img-fluid" />
-                                            </div>
-                                            <div class="col-5 col-md-5">
-                                                <h6 class="mb-0">Cadbury 5 Star Chocolate</h6>
-                                                <span><small class="text-muted">1 kg</small></span>
-                                            </div>
-                                            <div class="col-2 col-md-2 text-center text-muted">
-                                                <span>1</span>
-                                            </div>
-                                            <div class="col-3 text-lg-end text-start text-md-end col-md-3">
-                                                <span class="fw-bold">$15.00</span>
-                                                <div class="text-decoration-line-through text-muted small">$20.00</div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!-- list group item -->
-                                    <li class="list-group-item px-4 py-3">
-                                        <div class="row align-items-center">
-                                            <div class="col-2 col-md-2">
-                                                <img src="../assets/images/products/product-img-4.jpg" alt="Ecommerce"
-                                                    class="img-fluid" />
-                                            </div>
-                                            <div class="col-5 col-md-5">
-                                                <h6 class="mb-0">Onion Flavour Potato</h6>
-                                                <span><small class="text-muted">250g</small></span>
-                                            </div>
-                                            <div class="col-2 col-md-2 text-center text-muted">
-                                                <span>1</span>
-                                            </div>
-                                            <div class="col-3 text-lg-end text-start text-md-end col-md-3">
-                                                <span class="fw-bold">$15.00</span>
-                                                <div class="text-decoration-line-through text-muted small">$20.00</div>
-                                            </div>
-                                        </div>
-                                    </li>
+                                        </li>
+                                    @endforelse
 
                                     <!-- list group item -->
                                     <li class="list-group-item px-4 py-3">
                                         <div class="d-flex align-items-center justify-content-between mb-2">
                                             <div>Item Subtotal</div>
-                                            <div class="fw-bold">$70.00</div>
+                                            <div class="fw-bold">&#8373; {{ $this->sub_total }}</div>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between">
                                             <div>
                                                 Service Fee
                                                 <i class="feather-icon icon-info text-muted" data-bs-toggle="tooltip"
-                                                    title="Default tooltip"></i>
+                                                    title="Additional charge for your service"></i>
                                             </div>
-                                            <div class="fw-bold">$3.00</div>
+                                            <div class="fw-bold">&#8373; {{ $this->service_fee }}</div>
                                         </div>
                                     </li>
                                     <!-- list group item -->
                                     <li class="list-group-item px-4 py-3">
                                         <div class="d-flex align-items-center justify-content-between fw-bold">
                                             <div>Subtotal</div>
-                                            <div>$73.00</div>
+                                            <div>&#8373; {{ $this->total }}</div>
                                         </div>
                                     </li>
                                 </ul>

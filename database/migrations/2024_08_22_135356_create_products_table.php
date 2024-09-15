@@ -23,6 +23,7 @@ return new class extends Migration
             $table->longText('long_description')->nullable();
             $table->decimal('base_price', 8, 2)->nullable();
             $table->decimal('sale_price', 8, 2)->nullable();
+            $table->integer('stock')->default(0);
             $table->string('sku')->unique();
             $table->string('status')->default('published')->comment('published, unpublished');
             $table->timestamps();

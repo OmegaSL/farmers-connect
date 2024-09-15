@@ -9,14 +9,12 @@ use Livewire\Component;
 
 class CartPreview extends Component
 {
-    use LivewireAlert;
+    use LivewireAlert, CartActionsTrait;
 
     public $sub_total = 0;
     public $service_fee = 0;
     public $total = 0;
     public $coupon_code;
-
-    use CartActionsTrait;
 
     public function cartPreview()
     {

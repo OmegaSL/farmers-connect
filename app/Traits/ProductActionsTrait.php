@@ -14,8 +14,8 @@ trait ProductActionsTrait
         $product = Product::find($product_id);
 
         if (auth()->guard('guest')->check()) {
-            WishList::updateOrCreate(['user_id' => auth()->user()->id, 'product_id' => $product->id], [
-                'user_id' => auth()->user()->id,
+            WishList::updateOrCreate(['user_id' => auth()->guard('guest')->user()->id, 'product_id' => $product->id], [
+                'user_id' => auth()->guard('guest')->user()->id,
                 'product_id' => $product->id
             ]);
         } else {

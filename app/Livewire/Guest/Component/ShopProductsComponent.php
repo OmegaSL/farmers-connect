@@ -60,9 +60,10 @@ class ShopProductsComponent extends Component
         switch ($this->type) {
             case 'category':
                 $products = Product::query()
-                    ->whereHas('variants', function ($query) {
-                        $query->where('stock', '>', 0);
-                    })
+                    // ->whereHas('variants', function ($query) {
+                    //     $query->where('stock', '>', 0);
+                    // })
+                    ->where('stock', '>', 0)
                     ->where('status', 'published')
                     ->whereHas('product_category', function ($query) {
                         $query->where('slug', $this->category_slug);
@@ -76,9 +77,10 @@ class ShopProductsComponent extends Component
                 $products = Product::query()
                     // ->where('name', 'like', '%' . $this->search_store . '%')
                     ->when($this->search_store, fn($query) => $query->where('name', 'like', '%' . $this->search_store . '%'))
-                    ->whereHas('variants', function ($query) {
-                        $query->where('stock', '>', 0);
-                    })
+                    // ->whereHas('variants', function ($query) {
+                    //     $query->where('stock', '>', 0);
+                    // })
+                    ->where('stock', '>', 0)
                     ->where('status', 'published')
                     ->whereHas('store', function ($query) {
                         $query->where('store_slug', $this->store_slug);
@@ -89,17 +91,19 @@ class ShopProductsComponent extends Component
                 break;
             case 'shop':
                 $products = Product::query()
-                    ->whereHas('variants', function ($query) {
-                        $query->where('stock', '>', 0);
-                    })
+                    // ->whereHas('variants', function ($query) {
+                    //     $query->where('stock', '>', 0);
+                    // })
+                    ->where('stock', '>', 0)
                     ->where('status', 'published')
                     ->orderBy($this->sortBy, $this->sortDirection);
                 break;
             default:
                 $products = Product::query()
-                    ->whereHas('variants', function ($query) {
-                        $query->where('stock', '>', 0);
-                    })
+                    // ->whereHas('variants', function ($query) {
+                    //     $query->where('stock', '>', 0);
+                    // })
+                    ->where('stock', '>', 0)
                     ->where('status', 'published')
                     ->orderBy($this->sortBy, $this->sortDirection);
                 break;

@@ -41,15 +41,18 @@ class QuickViewComponent extends Component
         $this->product = Product::find($product_id);
         $this->available_quantity = $this->product->available_quantity;
         $this->selectedVariant = $this->product?->variants->first()->id ?? null;
-        $this->price = $this->product->variants->first()->price + $this->product->base_price;
+        // $this->price = $this->product->variants->first()->price + $this->product->base_price;
+        $this->price = $this->product->base_price;
     }
 
     public function updateProductPrice($variant_id)
     {
         // $this->price += $this->product?->variants?->find($variant_id)->price;
 
-        $variant_price = $this->product?->variants?->find($variant_id)->price ?? 0 + (float) $this->product?->base_price;
+        // $variant_price = $this->product?->variants?->find($variant_id)->price ?? 0 + (float) $this->product?->base_price;
 
-        $this->price = $variant_price == 0 ? 0 + (float) $this->product?->base_price : $variant_price;
+        // $this->price = $variant_price == 0 ? 0 + (float) $this->product?->base_price : $variant_price;
+
+        $this->price = (float) $this->product?->base_price;
     }
 }

@@ -114,30 +114,30 @@ class ProductResource extends Resource
                             ->grid(3)
                     ]),
 
-                Forms\Components\Section::make('Product Variants')
-                    ->description('List all the item variations')
-                    ->schema([
-                        Forms\Components\Repeater::make('variants')
-                            ->itemLabel(fn(array $state): ?string => $state['variant_name'] ?? null)
-                            ->relationship()
-                            ->schema([
-                                Forms\Components\TextInput::make('variant_name')
-                                    ->required()
-                                    ->columnSpanFull(),
-                                Forms\Components\TextInput::make('price')
-                                    ->numeric()
-                                    ->minValue(0)
-                                    ->required(),
-                                Forms\Components\TextInput::make('stock')
-                                    ->numeric()
-                                    ->minValue(0)
-                                    ->required(),
-                            ])
-                            ->columns(2)
-                            ->collapsible()
-                            ->defaultItems(0)
-                            ->grid(3)
-                    ]),
+                // Forms\Components\Section::make('Product Variants')
+                //     ->description('List all the item variations')
+                //     ->schema([
+                //         Forms\Components\Repeater::make('variants')
+                //             ->itemLabel(fn(array $state): ?string => $state['variant_name'] ?? null)
+                //             ->relationship()
+                //             ->schema([
+                //                 Forms\Components\TextInput::make('variant_name')
+                //                     ->required()
+                //                     ->columnSpanFull(),
+                //                 Forms\Components\TextInput::make('price')
+                //                     ->numeric()
+                //                     ->minValue(0)
+                //                     ->required(),
+                //                 Forms\Components\TextInput::make('stock')
+                //                     ->numeric()
+                //                     ->minValue(0)
+                //                     ->required(),
+                //             ])
+                //             ->columns(2)
+                //             ->collapsible()
+                //             ->defaultItems(0)
+                //             ->grid(3)
+                //     ]),
 
             ]);
     }

@@ -26,7 +26,7 @@ class Wishlists extends Component
     public function wishlistPreview()
     {
         $wishlists = WishList::query()
-            // ->where('user_id', auth()->user()?->id)
+            ->where('user_id', auth()->guard('guest')->user()?->id)
             ->get();
 
         return $wishlists;

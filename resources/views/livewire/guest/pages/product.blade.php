@@ -81,6 +81,10 @@
                                                     <td>{{ $product->store->store_name }}</td>
                                                 </tr>
                                                 <tr>
+                                                    <th>Seller phone</th>
+                                                    <td>{{ $product->store?->user?->telephone ?? 'N/A' }}</td>
+                                                </tr>
+                                                <tr>
                                                     <th>Region</th>
                                                     <td>
                                                         {{ $product->store?->town?->district?->region?->name ?? 'N/A' }}
@@ -112,7 +116,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th colspan="2" class="text-center">
-                                                        {{ $product->store->description }}
+                                                        {{ $product->store?->description }}
                                                     </th>
                                                 </tr>
                                             </tbody>

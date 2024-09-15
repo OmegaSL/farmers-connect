@@ -59,17 +59,16 @@
                                                             {{ $wishlist->product->name }}
                                                         </a>
                                                     </h5>
-                                                    <small>
+                                                    {{-- <small>
                                                         @foreach ($wishlist->product->variants as $variant)
                                                             {{ $variant->variant_name }} |
                                                         @endforeach
-                                                        {{-- $.98 / lb --}}
-                                                    </small>
+                                                    </small> --}}
                                                 </div>
                                             </td>
                                             <td class="align-middle">&#8373;{{ $wishlist->product->base_price }}</td>
                                             <td class="align-middle">
-                                                @if ($wishlist->product->variants->sum('stock') > 0)
+                                                @if ($wishlist->product->stock > 0)
                                                     <span class="badge bg-success">
                                                         In Stock
                                                     </span>
@@ -80,7 +79,7 @@
                                                 @endif
                                             </td>
                                             <td class="align-middle">
-                                                @if ($wishlist->product->variants->sum('stock') > 0)
+                                                @if ($wishlist->product->stock > 0)
                                                     @livewire('guest.component.cart-button-component', ['product' => $wishlist->product, 'type' => 'wishlist'])
                                                 @else
                                                     <div class="btn btn-dark btn-sm">

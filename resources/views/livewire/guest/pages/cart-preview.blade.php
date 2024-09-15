@@ -28,7 +28,7 @@
                         <ul class="list-group list-group-flush">
                             @forelse ($cart_list as $cart)
                                 <!-- list group -->
-                                <li class="list-group-item py-3 ps-0">
+                                <li class="list-group-item py-3 ps-0" wire:key="{{ $cart['id'] }}">
                                     <!-- row -->
                                     <div class="row align-items-center">
                                         <div class="col-6 col-md-6 col-lg-7">
@@ -45,11 +45,11 @@
                                                     <a href="shop-single.html" class="text-inherit">
                                                         <h6 class="mb-0">{{ $cart['name'] }}</h6>
                                                     </a>
-                                                    <span>
+                                                    {{-- <span>
                                                         <small class="text-muted">
                                                             {{ $cart['attributes']['variant']?->variant_name ?? '' }}
                                                         </small>
-                                                    </span>
+                                                    </span> --}}
                                                     <!-- text -->
                                                     <div class="mt-2 small lh-1">
                                                         <a href="#!"
@@ -85,14 +85,12 @@
                                             <div class="input-group input-spinner">
                                                 <input type="button" value="-" class="button-minus btn btn-sm"
                                                     wire:click.prevent="decreaseCartQuantity('{{ $cart['id'] }}')"
-                                                    data-field="quantity"
                                                     {{ $cart['quantity'] == 1 ? 'disabled' : '' }} />
                                                 <input type="number" step="1" min="1" disabled
                                                     value="{{ $cart['quantity'] }}" name="quantity"
                                                     class="quantity-field form-control-sm form-input" />
                                                 <input type="button" value="+" class="button-plus btn btn-sm"
-                                                    wire:click.prevent="increaseCartQuantity('{{ $cart['id'] }}')"
-                                                    data-field="quantity" />
+                                                    wire:click.prevent="increaseCartQuantity('{{ $cart['id'] }}')" />
                                             </div>
                                         </div>
                                         <!-- price -->

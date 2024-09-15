@@ -17,8 +17,9 @@ class OrdersComponent extends Component
     {
         return view('livewire.guest.dashboard.orders-component', [
             'order_items' => OrderItem::query()
+                ->latest()
                 ->whereHas('order', function ($query) {
-                    $query->where('user_id', auth()->user()?->id);
+                    $query->where('user_id', auth()->guard('guest')->user()?->id);
                 })
                 ->paginate($this->perPage),
         ])->extends('livewire.guest.layouts.master');

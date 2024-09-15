@@ -37,8 +37,8 @@
                                             <a href="shop-single.html" class="text-inherit">
                                                 <h6 class="mb-0">{{ $cart['name'] }}</h6>
                                             </a>
-                                            <span><small
-                                                    class="text-muted">{{ $cart['attributes']['variant']?->variant_name ?? '' }}</small></span>
+                                            {{-- <span><small
+                                                    class="text-muted">{{ $cart['attributes']['variant']?->variant_name ?? '' }}</small></span> --}}
                                             <!-- text -->
                                             <div class="mt-2 small lh-1">
                                                 <a href="#!"

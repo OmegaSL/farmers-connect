@@ -28,6 +28,7 @@ class Product extends Model
         'long_description',
         'base_price',
         'sale_price',
+        'stock',
         'sku',
         'status'
     ];

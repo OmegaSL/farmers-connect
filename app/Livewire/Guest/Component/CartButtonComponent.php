@@ -24,7 +24,7 @@ class CartButtonComponent extends Component
     public function addToCart()
     {
         // dd($this->product);
-        $userID = auth()->check() ? auth()->user()->id : null;
+        $userID = auth()->check() ? auth()->guard('guest')->user()->id : null;
         $rowId = "product_{{$this->product->id}}";
 
         // check if the product has variants
@@ -33,8 +33,14 @@ class CartButtonComponent extends Component
         //     return;
         // }
 
+        // check if the product has stock
+        if ($this->product->stock <= 0) {
+            $this->alert('error', 'This product has no stock available.');
+            return;
+        }
+
         // pick the first variant from the product
-        $product_variant = $this->product->variants->first();
+        // $product_variant = $this->product->variants->first();
 
         // calculate the percent off when product has sale price
         $saleCondition = [];
@@ -51,11 +57,11 @@ class CartButtonComponent extends Component
         $product = [
             'id' => $rowId,
             'name' => $this->product->name,
-            'price' => $this->product->sale_price ?? $this->product->base_price + $product_variant?->price ?? 0,
+            'price' => $this->product->sale_price ?? $this->product->base_price,
             'quantity' => $this->quantity,
             'attributes' => [
                 'product' => $this->product,
-                'variant' => $product_variant ?? null,
+                // 'variant' => $product_variant ?? null,
             ],
             'conditions' => $saleCondition
         ];
@@ -84,7 +90,7 @@ class CartButtonComponent extends Component
 
         $this->addToCart();
 
-        $wishlists = WishList::query()->where('user_id', auth()->user()?->id)->get();
+        $wishlists = WishList::query()->where('user_id', auth()->guard('guest')->user()?->id)->get();
         foreach ($wishlists as $wishlist) {
             if ($wishlist->product_id == $rowId) {
                 $wishlist->delete();
