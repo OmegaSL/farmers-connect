@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ProductResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ProductResource\RelationManagers;
+use App\Models\Store;
 
 class ProductResource extends Resource
 {
@@ -46,6 +47,17 @@ class ProductResource extends Resource
             ->doesntHave('parent')
             ->limit(20)->pluck('name', 'id');
 
+        if (auth()->user()->hasRole('super_admin') || auth()->user()->hasRole('admin')) {
+            $stores = fn(string $search) => Store::where('store_name', 'like', "%{$search}%")
+                ->limit(20)->pluck('store_name', 'id');
+        } else {
+            $stores = fn(string $search) => Store::where('store_name', 'like', "%{$search}%")
+                ->where('user_id', auth()->user()->id)
+                ->limit(20)->pluck('store_name', 'id');
+        }
+        // $stores = fn(string $search) => Store::where('store_name', 'like', "%{$search}%")
+        //     ->limit(20)->pluck('store_name', 'id');
+
         return $form
             ->schema([
                 Forms\Components\Section::make()
@@ -53,6 +65,8 @@ class ProductResource extends Resource
                         Forms\Components\Select::make('store_id')
                             ->relationship('store', 'store_name')
                             ->searchable()
+                            ->getSearchResultsUsing($stores)
+                            ->getOptionLabelUsing(fn($value): ?string => Store::find($value)?->store_name)
                             ->required(),
                         Forms\Components\Select::make('category_id')
                             ->relationship('product_category', 'name')
@@ -202,5 +216,21 @@ class ProductResource extends Resource
             'create' => Pages\CreateProduct::route('/create'),
             'edit' => Pages\EditProduct::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        if (auth()->user()->hasRole('super_admin') || auth()->user()->hasRole('admin')) {
+            return parent::getEloquentQuery()
+                ->withoutGlobalScopes([
+                    SoftDeletingScope::class,
+                ]);
+        }
+
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ])
+            ->where('user_id', auth()->id());
     }
 }

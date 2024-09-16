@@ -21,11 +21,12 @@ class StoreFactory extends Factory
     public function definition(): array
     {
         $townIds = Town::pluck('id')->toArray();
+        $users = User::where('user_type', 'farmer')->pluck('id')->toArray();
 
         Log::info('Getting user factory data', $townIds);
 
         return [
-            'user_id' => User::factory(),
+            'user_id' => $this->faker->randomElement($users),
             'town_id' => $this->faker->randomElement($townIds),
             'store_name' => $this->faker->company(),
             'store_slug' => Str::slug($this->faker->company()),
