@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Models\Store;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class RegionDistrictTownSeeder extends Seeder
@@ -1035,6 +1037,25 @@ class RegionDistrictTownSeeder extends Seeder
             }
         }
 
+        // create a role called farmer
+        // $role1 = new Role();
+        // $role1->name = 'super_admin';
+        // $role1->guard_name = 'web';
+        // $role1->save();
+        // $role1->givePermissionTo(Permission::all());
+
+        // // create a role called farmer
+        // $role2 = new Role();
+        // $role2->name = 'normal_user';
+        // $role2->guard_name = 'web';
+        // $role2->save();
+
+        // // create a role called farmer
+        // $role3 = new Role();
+        // $role3->name = 'farmer';
+        // $role3->guard_name = 'web';
+        // $role3->save();
+
         // create user and store factory here
         $user = User::factory()->create([
             'name' => 'Super Admin',
@@ -1042,7 +1063,12 @@ class RegionDistrictTownSeeder extends Seeder
             'last_name' => 'Admin',
             'email' => 'admin@farm-connect.com',
         ]);
-        User::factory(5)->create();
+        // $user->assignRole($role1);
+
+        $farmers_user = User::factory(5)->create();
+        // $farmers_user->where('user_type', 'farmer')->each(function ($user) use ($role3) {
+        //     $user->assignRole($role3);
+        // });
 
         Store::factory()->create([
             'user_id' => $user->id,

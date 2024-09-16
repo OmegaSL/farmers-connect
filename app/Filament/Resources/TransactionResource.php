@@ -148,4 +148,26 @@ class TransactionResource extends Resource
             // 'edit' => Pages\EditTransaction::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): Builder
+    {
+        if (auth()->user()->hasRole('super_admin') || auth()->user()->hasRole('admin')) {
+            return parent::getEloquentQuery()
+                ->withoutGlobalScopes([
+                    SoftDeletingScope::class,
+                ]);
+        }
+
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ])
+            ->whereHas('order', function ($query) {
+                $query->whereHas('order_items', function ($query) {
+                    $query->whereHas('product', function ($query) {
+                        $query->where('user_id', auth()->id());
+                    });
+                });
+            });
+    }
 }

@@ -16,6 +16,7 @@ use App\Filament\Resources\OrderResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Filament\Resources\OrderResource\RelationManagers\HistoriesRelationManager;
+use App\Models\OrderItem;
 
 class OrderResource extends Resource
 {
@@ -64,6 +65,19 @@ class OrderResource extends Resource
                         Forms\Components\Repeater::make('order_items')
                             ->disabledOn('edit')
                             ->relationship()
+                            // ->mutateRelationshipDataBeforeFillUsing(function (array $data): array {
+                            //     // dd($data);
+                            //     $data = OrderItem::where('order_id', $data['order_id'])
+                            //         ->where('id', $data['id'])
+                            //         ->whereHas('product', function (Builder $query) use ($data) {
+                            //             $query->where('user_id', auth()->id());
+                            //         })
+                            //         ->first()
+                            //         ?->toArray();
+                            //     // dd($data);
+
+                            //     return $data ?? [];
+                            // })
                             ->schema([
                                 Forms\Components\Select::make('product_id')
                                     ->relationship('product', 'name')
@@ -145,5 +159,25 @@ class OrderResource extends Resource
             'create' => Pages\CreateOrder::route('/create'),
             'edit' => Pages\EditOrder::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        if (auth()->user()->hasRole('super_admin') || auth()->user()->hasRole('admin')) {
+            return parent::getEloquentQuery()
+                ->withoutGlobalScopes([
+                    SoftDeletingScope::class,
+                ]);
+        }
+
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ])
+            ->whereHas('order_items', function ($query) {
+                $query->whereHas('product', function ($query) {
+                    $query->where('user_id', auth()->id());
+                });
+            });
     }
 }
