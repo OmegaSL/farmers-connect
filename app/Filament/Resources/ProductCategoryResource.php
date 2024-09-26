@@ -97,6 +97,7 @@ class ProductCategoryResource extends Resource
                     ->label(trans('Creation Date'))
                     ->dateTime('M j, Y')->sortable(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

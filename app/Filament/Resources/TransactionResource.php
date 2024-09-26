@@ -120,6 +120,7 @@ class TransactionResource extends Resource
                 Tables\Columns\TextColumn::make('created_at')->label(trans('Creation Date'))
                     ->dateTime('M j, Y')->sortable(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

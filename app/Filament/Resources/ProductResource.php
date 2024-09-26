@@ -76,9 +76,7 @@ class ProductResource extends Resource
                             ->getOptionLabelUsing(fn($value): ?string => ProductCategory::find($value)?->name)
                             ->label(trans('Select Category')),
                         Forms\Components\TextInput::make('name')
-                            // ->unique(modifyRuleUsing: function (Unique $rule) use ($form) {
-                            //     return $rule->ignore($form->model?->id);
-                            // })
+                            ->unique(ignorable: fn($record) => $record)
                             // ->reactive()
                             ->afterStateUpdated(fn($state, callable $set) => $set('slug', Str::slug($state)))
                             ->required()
@@ -189,6 +187,7 @@ class ProductResource extends Resource
                     ->label(trans('Creation Date'))
                     ->dateTime('M j, Y')->sortable(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])
