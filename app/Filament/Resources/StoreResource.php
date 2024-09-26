@@ -42,9 +42,7 @@ class StoreResource extends Resource
                     ->relationship('town', 'name'),
                 Forms\Components\TextInput::make('store_name')
                     ->required()
-                    ->unique(modifyRuleUsing: function (Unique $rule) use ($form) {
-                        return $rule->ignore($form->model->id);
-                    })
+                    ->unique(ignorable: fn($record) => $record)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('address')
                     ->maxLength(255),
@@ -68,6 +66,7 @@ class StoreResource extends Resource
                 Tables\Columns\TextColumn::make('address')
                     ->searchable(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

@@ -42,9 +42,11 @@ class OrderResource extends Resource
                 //     ->maxLength(255),
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
+                    ->disabledOn('edit')
                     ->searchable()
                     ->required(),
                 Forms\Components\TextInput::make('total_amount')
+                    ->disabledOn('edit')
                     ->required()
                     ->numeric()
                     ->minValue(0)
@@ -131,6 +133,7 @@ class OrderResource extends Resource
                     ->dateTime('M j, Y')
                     ->sortable(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

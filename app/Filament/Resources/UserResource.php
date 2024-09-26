@@ -70,9 +70,7 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('last_name')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
-                    ->unique(modifyRuleUsing: function (Unique $rule) use ($form) {
-                        return $rule->ignore($form->model->id);
-                    })
+                    ->unique(ignorable: fn($record) => $record)
                     ->email()
                     ->required()
                     ->maxLength(255),
@@ -132,6 +130,7 @@ class UserResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 Tables\Filters\SelectFilter::make('user_type')
                     ->options([
