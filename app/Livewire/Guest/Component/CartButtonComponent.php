@@ -24,7 +24,7 @@ class CartButtonComponent extends Component
     public function addToCart()
     {
         // dd($this->product);
-        $userID = auth()->check() ? auth()->guard('guest')->user()->id : null;
+        $userID = auth()->guard('guest')->check() ? auth()->guard('guest')->user()->id : null;
         $rowId = "product_{{$this->product->id}}";
 
         // check if the product has variants

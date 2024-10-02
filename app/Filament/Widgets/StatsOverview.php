@@ -19,44 +19,114 @@ class StatsOverview extends BaseWidget
 
     protected function getCards(): array
     {
+        $user = auth()->user();
+        // check if logged in user is super admin
+        if (auth()->user()->hasRole('super_admin')) {
+            $user = null;
+        }
+
         // cedis symbol
         $currency = '₵';
 
         // First card
-        $total_orders = \App\Models\Order::count();
+        $total_orders = \App\Models\Order::query()
+            ->when($user, function ($query) use ($user) {
+                return $query->where('user_id', $user->id);
+            })
+            ->count();
         $total_orders = $total_orders > 1000 ? round($total_orders / 1000, 1) . 'K' : $total_orders;
 
-        $pending_orders = \App\Models\Order::where('status', 'pending')->count();
+        $pending_orders = \App\Models\Order::where('status', 'pending')
+            ->when($user, function ($query) use ($user) {
+                return $query->whereHas('order_items', function ($query) use ($user) {
+                    $query->whereHas('product', function ($query) use ($user) {
+                        $query->where('user_id', $user->id);
+                    });
+                });
+            })
+            ->count();
         $pending_orders = $pending_orders > 1000 ? round($pending_orders / 1000, 1) . 'K' : $pending_orders;
 
-        $completed_orders = \App\Models\Order::where('status', 'completed')->count();
+        $completed_orders = \App\Models\Order::where('status', 'completed')
+            ->when($user, function ($query) use ($user) {
+                return $query->whereHas('order_items', function ($query) use ($user) {
+                    $query->whereHas('product', function ($query) use ($user) {
+                        $query->where('user_id', $user->id);
+                    });
+                });
+            })
+            ->count();
         $completed_orders = $completed_orders > 1000 ? round($completed_orders / 1000, 1) . 'K' : $completed_orders;
 
-        $cancelled_orders = \App\Models\Order::where('status', 'cancelled')->count();
+        $cancelled_orders = \App\Models\Order::where('status', 'cancelled')
+            ->when($user, function ($query) use ($user) {
+                return $query->whereHas('order_items', function ($query) use ($user) {
+                    $query->whereHas('product', function ($query) use ($user) {
+                        $query->where('user_id', $user->id);
+                    });
+                });
+            })
+            ->count();
         $cancelled_orders = $cancelled_orders > 1000 ? round($cancelled_orders / 1000, 1) . 'K' : $cancelled_orders;
 
         // Second card
-        $total_product_order = \App\Models\OrderItem::count();
+        $total_product_order = \App\Models\OrderItem::query()
+            ->when($user, function ($query) use ($user) {
+                return $query->whereHas('product', function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                });
+            })
+            ->count();
         $total_product_order = $total_product_order > 1000 ? round($total_product_order / 1000, 1) . 'K' : $total_product_order;
 
-        $today_product_order = \App\Models\OrderItem::whereDate('created_at', today())->count();
+        $today_product_order = \App\Models\OrderItem::query()
+            ->when($user, function ($query) use ($user) {
+                return $query->whereHas('product', function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                });
+            })
+            ->whereDate('created_at', today())->count();
         $today_product_order = $today_product_order > 1000 ? round($today_product_order / 1000, 1) . 'K' : $today_product_order;
 
-        $this_month_sale = \App\Models\OrderItem::whereMonth('created_at', date('m'))->count();
+        $this_month_sale = \App\Models\OrderItem::query()
+            ->when($user, function ($query) use ($user) {
+                return $query->whereHas('product', function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                });
+            })
+            ->whereMonth('created_at', date('m'))->count();
         $this_month_sale = $this_month_sale > 1000 ? round($this_month_sale / 1000, 1) . 'K' : $this_month_sale;
 
-        $this_year_sale = \App\Models\OrderItem::whereYear('created_at', date('Y'))->count();
+        $this_year_sale = \App\Models\OrderItem::query()
+            ->when($user, function ($query) use ($user) {
+                return $query->whereHas('product', function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                });
+            })
+            ->whereYear('created_at', date('Y'))->count();
         $this_year_sale = $this_year_sale > 1000 ? round($this_year_sale / 1000, 1) . 'K' : $this_year_sale;
 
         // Third card
-        $total_earning = \App\Models\OrderItem::get()->reduce(function ($carry, $item) {
-            return $carry + $item->price * $item->quantity;
-        });
+        $total_earning = \App\Models\OrderItem::query()
+            ->when($user, function ($query) use ($user) {
+                return $query->whereHas('product', function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                });
+            })
+            ->get()->reduce(function ($carry, $item) {
+                return $carry + $item->price * $item->quantity;
+            });
         $total_earning = $total_earning > 1000 ? round($total_earning / 1000, 1) . 'K' : $total_earning;
 
-        $today_pending_earning = \App\Models\OrderItem::whereHas('order', function ($query) {
-            $query->where('status', 'pending');
-        })->whereDate('created_at', today())
+        $today_pending_earning = \App\Models\OrderItem::query()
+            ->when($user, function ($query) use ($user) {
+                return $query->whereHas('product', function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                });
+            })
+            ->whereHas('order', function ($query) {
+                $query->where('status', 'pending');
+            })->whereDate('created_at', today())
             ->get()
             ->reduce(function ($carry, $item) {
                 return $carry + $item->price * $item->quantity;
@@ -82,7 +152,11 @@ class StatsOverview extends BaseWidget
 
 
         // Fourth card
-        $total_product = \App\Models\Product::count();
+        $total_product = \App\Models\Product::query()
+            ->when($user, function ($query) use ($user) {
+                return $query->where('user_id', $user->id);
+            })
+            ->count();
         $total_product = $total_product > 1000 ? round($total_product / 1000, 1) . 'K' : $total_product;
 
         $total_customer = \App\Models\User::whereHas('roles', function ($query) {
