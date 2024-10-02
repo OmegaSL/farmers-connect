@@ -49,8 +49,22 @@ class ProductSalesChart extends LineChartWidget
     {
         $activeFilter = $this->filter;
 
+        $user = auth()->user();
+        // check if logged in user is super admin
+        if (auth()->user()->hasRole('super_admin')) {
+            $user = null;
+        }
+
         $data1 = Trend::query(
-            Order::where('status', 'completed')
+            Order::query()
+                ->when($user, function ($query) use ($user) {
+                    return $query->whereHas('order_items', function ($query) use ($user) {
+                        $query->whereHas('product', function ($query) use ($user) {
+                            $query->where('user_id', $user->id);
+                        });
+                    });
+                })
+                ->where('status', 'completed')
         )
             ->between(
                 start: now()->startOf($activeFilter),
@@ -60,7 +74,15 @@ class ProductSalesChart extends LineChartWidget
             ->sum('total_amount');
 
         $data2 = Trend::query(
-            Order::where('status', 'pending')
+            Order::query()
+                ->when($user, function ($query) use ($user) {
+                    return $query->whereHas('order_items', function ($query) use ($user) {
+                        $query->whereHas('product', function ($query) use ($user) {
+                            $query->where('user_id', $user->id);
+                        });
+                    });
+                })
+                ->where('status', 'pending')
         )
             ->between(
                 start: now()->startOf($activeFilter),
@@ -70,7 +92,15 @@ class ProductSalesChart extends LineChartWidget
             ->sum('total_amount');
 
         $data3 = Trend::query(
-            Order::where('status', 'cancelled')
+            Order::query()
+                ->when($user, function ($query) use ($user) {
+                    return $query->whereHas('order_items', function ($query) use ($user) {
+                        $query->whereHas('product', function ($query) use ($user) {
+                            $query->where('user_id', $user->id);
+                        });
+                    });
+                })
+                ->where('status', 'cancelled')
         )
             ->between(
                 start: now()->startOf($activeFilter),
