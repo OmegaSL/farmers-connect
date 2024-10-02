@@ -21,7 +21,8 @@
                     {{-- <a href="#!"><img src="{{ $product->image }}" alt="Grocery Ecommerce Template"
                         class="mb-3 img-fluid" /></a> --}}
                     <a href="{{ route('product.page', $product->slug) }}">
-                        <img src="{{ $product->image }}" alt="Grocery Ecommerce Template" class="mb-3 img-fluid"
+                        <img src="{{ $product->image }}" alt="Grocery Ecommerce Template"
+                            class="mb-3 img-fluid resizable-image" width="220"
                             style="{{ $hasImage == null ? 'filter: blur(5px);' : '' }}" />
                     </a>
                     <!-- action btn -->

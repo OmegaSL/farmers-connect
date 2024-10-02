@@ -143,7 +143,7 @@
                                     <!-- img -->
                                     <img src="{{ $product_category->image }}"
                                         style="{{ $categoryHasImage == null ? 'filter: blur(5px);' : '' }}"
-                                        alt="Grocery Ecommerce Template" class="mb-3" />
+                                        alt="Grocery Ecommerce Template" class="mb-3 resizable-image" width="120" />
                                     <!-- text -->
                                     <div class="text-truncate">{{ $product_category->name }}</div>
                                 </div>
