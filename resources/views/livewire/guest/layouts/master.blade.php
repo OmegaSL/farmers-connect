@@ -43,6 +43,13 @@
             y.parentNode.insertBefore(t, y);
         })(window, document, "clarity", "script", "kuc8w5o9nt");
     </script>
+
+    <style>
+        .resizable-image {
+            display: block;
+            margin: auto;
+        }
+    </style>
 </head>
 
 <body>
