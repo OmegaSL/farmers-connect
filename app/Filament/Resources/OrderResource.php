@@ -105,7 +105,6 @@ class OrderResource extends Resource
                                 Forms\Components\Select::make('product_variant_id')
                                     ->relationship('variant', 'variant_name')
                                     ->searchable()
-                                    ->required()
                                     ->reactive()
                                     ->afterStateUpdated(function ($state, callable $set, $get) use ($variants) {
                                         $set('price', $variants->find($state)?->price ?? $get('price'));

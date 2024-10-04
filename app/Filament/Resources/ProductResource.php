@@ -88,8 +88,7 @@ class ProductResource extends Resource
                         Forms\Components\TextInput::make('sale_price')
                             ->numeric()
                             ->default(0)
-                            ->minValue(0)
-                            ->required(),
+                            ->minValue(0),
                         Forms\Components\Select::make('status')
                             ->options([
                                 'unpublished' => 'Unpublished',
