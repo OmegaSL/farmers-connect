@@ -35,6 +35,11 @@ class OrderResource extends Resource
 
     public static function form(Form $form): Form
     {
+        // get the variant for the selected product
+        // dd($form->model->order_items);
+        // $variants = ProductVariant::where('product_id', $form->getState('product_id'))->get();
+        $variants = ProductVariant::query();
+
         return $form
             ->schema([
                 // Forms\Components\TextInput::make('tracking_number')
@@ -55,6 +60,7 @@ class OrderResource extends Resource
                     ->required()
                     ->options([
                         'pending' => 'Pending',
+                        'processing' => 'Processing',
                         'completed' => 'Completed',
                         'cancelled' => 'Cancelled',
                         'partial_refund' => 'Partial Refund',
@@ -65,7 +71,6 @@ class OrderResource extends Resource
                     ->description('List all the items for this order')
                     ->schema([
                         Forms\Components\Repeater::make('order_items')
-                            ->disabledOn('edit')
                             ->relationship()
                             // ->mutateRelationshipDataBeforeFillUsing(function (array $data): array {
                             //     // dd($data);
@@ -85,22 +90,59 @@ class OrderResource extends Resource
                                     ->relationship('product', 'name')
                                     ->searchable()
                                     ->required()
+                                    ->reactive()
+                                    ->afterStateUpdated(function ($state, callable $set) {
+                                        $product = Product::find($state);
+                                        if ($product) {
+                                            $set('price', (float)number_format($product->sale_price ?? $product->base_price, 2));
+                                            $variants = ProductVariant::where('product_id', $state)->get();
+                                            $set('product_variant_id', $variants->first()->id ?? null);
+                                            // dd($variants ?? null);
+                                        }
+                                    })
+                                    // ->disabledOn('edit')
                                     ->columnSpanFull(),
                                 Forms\Components\Select::make('product_variant_id')
                                     ->relationship('variant', 'variant_name')
                                     ->searchable()
                                     ->required()
                                     ->reactive()
+                                    ->afterStateUpdated(function ($state, callable $set, $get) use ($variants) {
+                                        $set('price', $variants->find($state)?->price ?? $get('price'));
+                                    })
+                                    ->getSearchResultsUsing(function (string $search, $get) use ($variants) {
+                                        return $variants
+                                            ->where('product_id', $get('product_id'))
+                                            ->where('variant_name', 'like', "%{$search}%")
+                                            ->limit(20)
+                                            ->pluck('variant_name', 'id')
+                                            ->toArray();
+                                    })
+                                    // ->getOptionLabelUsing(function ($value) use ($variants) {
+                                    //     return $variants->find($value)?->variant_name;
+                                    // })
+                                    // ->disabledOn('edit')
                                     ->columnSpanFull(),
                                 Forms\Components\TextInput::make('quantity')
                                     ->required()
                                     ->numeric()
+                                    // ->disabledOn('edit')
                                     ->minValue(0),
                                 Forms\Components\TextInput::make('price')
                                     ->numeric()
                                     ->minValue(0)
+                                    // ->disabledOn('edit')
+                                    ->required(),
+                                Forms\Components\Select::make('status')
+                                    ->options([
+                                        'pending' => 'Pending',
+                                        'completed' => 'Completed',
+                                        'dropped' => 'Dropped',
+                                        'delivered' => 'Delivered',
+                                    ])
                                     ->required(),
                             ])
+                            ->addable(false)
                             ->columns(2)
                             ->collapsible()
                             ->defaultItems(1)
@@ -116,6 +158,11 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('tracking_number')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('user.name')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('user.telephone')
+                    ->formatStateUsing(fn($record): string => $record->user?->telephone ?? 'N/A')
+                    ->label('Customer Phone')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total_amount')
@@ -138,6 +185,7 @@ class OrderResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
